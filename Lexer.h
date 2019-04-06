@@ -22,15 +22,15 @@ enum LexType
     semicolon, comma, end_of_code
 };
 
-class Token
+struct Token
 {
-public:
-
-private:
     LexType type;
     TextPosition position;
     std::string text;
     int value;
+    bool error;
+
+    Token();
 };
 
 class Lexer
