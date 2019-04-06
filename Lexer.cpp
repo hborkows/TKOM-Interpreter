@@ -8,3 +8,8 @@ Lexer::Lexer(Source* source) : source(source)
 {
 
 }
+
+Token Lexer::nextToken()
+{
+    //TODO
+}
