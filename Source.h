@@ -8,6 +8,11 @@
 #include <string>
 #include <fstream>
 
+struct TextPosition
+{
+    int line;
+    int column;
+};
 
 class Source
 {
@@ -16,11 +21,13 @@ public:
 
     char peek();
     char take();
+    TextPosition getPosition() {return position;}
 
 private:
     std::string fileName;
     std::fstream fin;
     char firstNotConsumed;
+    TextPosition position;
 
     void readCharFromFile();
 };
