@@ -28,9 +28,11 @@ struct Token
     TextPosition position;
     std::string text;
     int value;
-    bool error;
+    bool isError;
 
     Token();
+
+    bool initToken(LexType type, TextPosition position, std::string text = std::string(), int value = 0);
 };
 
 class Lexer
@@ -42,6 +44,9 @@ public:
 
 private:
     Source* source;
+
+    bool isWhitespace(char c);
+    void skipLine(char& c);
 };
 
 

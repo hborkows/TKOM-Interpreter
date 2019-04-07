@@ -6,7 +6,17 @@
 
 Token::Token() : value(), text(), type(), position()
 {
-    error = false;
+    isError = false;
+}
+
+bool Token::initToken(LexType type, TextPosition position, std::string text, int value)
+{
+    this->type = type;
+    this->position = position;
+    this->text = text;
+    this->value = value;
+
+    return false;
 }
 
 Lexer::Lexer(Source* source) : source(source)
@@ -23,91 +33,111 @@ Token Lexer::nextToken()
     while(tokenNotBuilt)
     {
         c = source->peek();
-        result.position = source->getPosition();
+
+        //Skip whitespaces
+        while(isWhitespace(c))
+        {
+            source->take();
+            c = source->peek();
+        }
+
+        //check if comment or division operator when given '\'
+        if(c == '\\')
+        {
+            source->take();
+            c = source->peek();
+            if(c == '\\')
+            {
+                skipLine(c);
+            }
+            else
+            {
+                tokenNotBuilt = result.initToken(div_op, source->getPosition());
+            }
+            source->take();
+        }
 
         switch(c)
         {
             //1-character operators
+            //----------------------------------------------------------------------------------------------------------
             case '+':
-                result.type = plus_op;
+                tokenNotBuilt = result.initToken(plus_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '-':
-                result.type = minus_op;
+                tokenNotBuilt = result.initToken(minus_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '*':
-                result.type = mul_op;
+                tokenNotBuilt = result.initToken(mul_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
-                break;
-            case '/':
-                result.type = div_op;
-                source->take();
-                tokenNotBuilt = false;
                 break;
             case '>':
-                result.type = gt_op;
+                tokenNotBuilt = result.initToken(gt_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '<':
-                result.type = lt_op;
+                tokenNotBuilt = result.initToken(lt_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '(':
-                result.type = lbracket;
+                tokenNotBuilt = result.initToken(lbracket, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case ')':
-                result.type = rbracket;
+                tokenNotBuilt = result.initToken(rbracket, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '{':
-                result.type = lcurlbracket;
+                tokenNotBuilt = result.initToken(lcurlbracket, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '}':
-                result.type = rcurlbracket;
+                tokenNotBuilt = result.initToken(rcurlbracket, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '!':
-                result.type = not_op;
+                tokenNotBuilt = result.initToken(not_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '=':
-                result.type = assign_op;
+                tokenNotBuilt = result.initToken(assign_op, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case ';':
-                result.type = semicolon;
+                tokenNotBuilt = result.initToken(semicolon, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case ',':
-                result.type = comma;
+                tokenNotBuilt = result.initToken(comma, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
             case '$':
-                result.type = end_of_code;
+                tokenNotBuilt = result.initToken(end_of_code, source->getPosition());
                 source->take();
-                tokenNotBuilt = false;
                 break;
+                //------------------------------------------------------------------------------------------------------
+                //
             default:
                 break;
         }
     }
 
     return result;
+}
+
+bool Lexer::isWhitespace(char c)
+{
+    return c == ' ' || c == '\t' || c == '\n';
+}
+
+void Lexer::skipLine(char &c)
+{
+    while(c != '\n')
+    {
+        source->take();
+        c = source->peek();
+    }
 }
 
