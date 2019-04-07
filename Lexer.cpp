@@ -13,7 +13,7 @@ bool Token::initToken(LexType type, TextPosition position, std::string text, int
 {
     this->type = type;
     this->position = position;
-    this->text = text;
+    this->text = std::move(text);
     this->value = value;
 
     return false;
@@ -113,6 +113,7 @@ Token Lexer::nextToken()
             switch (c)
             {
                 //text constant
+                //------------------------------------------------------------------------------------------------------
                 case '\"':
                     source->take();
                     c = source->peek();
@@ -157,7 +158,7 @@ Token Lexer::nextToken()
                         tokenNotBuilt = result.initToken(assign_op, source->getPosition());
                     break;
                     //1-character operators
-                    //----------------------------------------------------------------------------------------------------------
+                    //--------------------------------------------------------------------------------------------------
                 case '+':
                     tokenNotBuilt = result.initToken(plus_op, source->getPosition());
                     source->take();
@@ -202,9 +203,10 @@ Token Lexer::nextToken()
                     tokenNotBuilt = result.initToken(end_of_code, source->getPosition());
                     source->take();
                     break;
-                    //------------------------------------------------------------------------------------------------------
-                    //
-                default:
+                    //--------------------------------------------------------------------------------------------------
+                default: //not a part of the language => not a valid token, error
+                    tokenNotBuilt = result.initToken(unknown, source->getPosition());
+                    result.isError = true;
                     break;
             }
         }

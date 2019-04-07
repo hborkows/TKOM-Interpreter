@@ -20,7 +20,8 @@ enum LexType
     id,
     int_kw, log_kw, string_kw,
     return_kw,
-    semicolon, comma, end_of_code
+    semicolon, comma, end_of_code,
+    unknown
 };
 
 
