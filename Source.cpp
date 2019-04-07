@@ -13,7 +13,7 @@ Source::Source(const std::string &fileName) : fileName(fileName), firstNotConsum
 
 char Source::peek()
 {
-    if(firstNotConsumed == 0)
+    if (firstNotConsumed == 0)
         readCharFromFile();
 
     return firstNotConsumed;
@@ -21,7 +21,7 @@ char Source::peek()
 
 char Source::take()
 {
-    if(firstNotConsumed == 0)
+    if (firstNotConsumed == 0)
         readCharFromFile();
 
     char tmp = firstNotConsumed;
@@ -35,9 +35,9 @@ void Source::readCharFromFile()
 
     position.column++;
 
-    if(firstNotConsumed == EOF)
+    if (firstNotConsumed == EOF)
         firstNotConsumed = '$';
-    else if(firstNotConsumed == '\n')
+    else if (firstNotConsumed == '\n')
     {
         position.line++;
         readCharFromFile();

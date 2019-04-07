@@ -20,8 +20,11 @@ public:
     explicit Source(const std::string &fileName);
 
     char peek();
+
     char take();
-    TextPosition getPosition() {return position;}
+
+    TextPosition getPosition()
+    { return position; }
 
 private:
     std::string fileName;

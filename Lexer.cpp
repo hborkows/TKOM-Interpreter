@@ -19,12 +19,12 @@ bool Token::initToken(LexType type, TextPosition position, std::string text, int
     return false;
 }
 
-Keyword::Keyword(const std::string& name, LexType type) : name(name), type(type)
+Keyword::Keyword(const std::string &name, LexType type) : name(name), type(type)
 {
 
 }
 
-Lexer::Lexer(Source* source) : source(source)
+Lexer::Lexer(Source *source) : source(source)
 {
     keywords = {
             Keyword("int", int_kw), Keyword("log", log_kw), Keyword("string", string_kw),
@@ -40,42 +40,42 @@ Token Lexer::nextToken()
     Token result;
     bool tokenNotBuilt = true;
     char c;
+    std::string buffer = std::string();
 
-    while(tokenNotBuilt)
+    while (tokenNotBuilt)
     {
         c = source->peek();
 
         //Skip whitespaces
-        while(isWhitespace(c))
+        while (isWhitespace(c))
         {
             source->take();
             c = source->peek();
         }
 
         //check if comment or division operator when given '\'
-        if(c == '\\')
+        if (c == '\\')
         {
             source->take();
             c = source->peek();
-            if(c == '\\')
+            if (c == '\\')
             {
                 skipLine(c);
-            }
-            else
+            } else
             {
                 tokenNotBuilt = result.initToken(div_op, source->getPosition());
             }
             source->take();
         }
 
-        //check if keyword or a variable name or a function name
-        else if(isAlpha(c))
+            //check if keyword or a variable name or a function name
+        else if (isAlpha(c))
         {
-            std::string buffer(1,c);
+            buffer += c;
             source->take();
             c = source->peek();
 
-            while(isAphaNum(c))
+            while (isAphaNum(c))
             {
                 buffer += c;
                 source->take();
@@ -84,24 +84,23 @@ Token Lexer::nextToken()
 
             int index = isKeyword(buffer);
 
-            if(index != -1) //buffer contains a keyword identified by index
+            if (index != -1) //buffer contains a keyword identified by index
             {
                 tokenNotBuilt = result.initToken(keywords[index].type, source->getPosition());
-            }
-            else //buffer contains variable or function id
+            } else //buffer contains variable or function id
             {
                 tokenNotBuilt = result.initToken(id, source->getPosition(), buffer);
             }
         }
 
-        //check if numerical value
-        else if(isDigit(c))
+            //check if numerical value
+        else if (isDigit(c))
         {
-            std::string buffer(1,c);
+            buffer += c;
             source->take();
             c = source->peek();
 
-            while(isDigit(c))
+            while (isDigit(c))
             {
                 buffer += c;
                 source->take();
@@ -109,13 +108,56 @@ Token Lexer::nextToken()
             }
 
             tokenNotBuilt = result.initToken(int_const, source->getPosition(), std::string(), std::stoi(buffer));
-        }
-        else
+        } else
         {
-            switch(c)
+            switch (c)
             {
-                //1-character operators
-                //----------------------------------------------------------------------------------------------------------
+                //text constant
+                case '\"':
+                    source->take();
+                    c = source->peek();
+                    while (c != '\"')
+                    {
+                        buffer += c;
+                        source->take();
+                        c = source->peek();
+                    }
+                    tokenNotBuilt = result.initToken(text_const, source->getPosition(), buffer);
+                    break;
+                    //2-character operators
+                    //--------------------------------------------------------------------------------------------------
+                case '>':
+                    source->take();
+                    c = source->peek();
+                    if (c == '=')
+                    {
+                        tokenNotBuilt = result.initToken(ge_op, source->getPosition());
+                        source->take();
+                    } else
+                        tokenNotBuilt = result.initToken(gt_op, source->getPosition());
+                    break;
+                case '<':
+                    source->take();
+                    c = source->peek();
+                    if (c == '=')
+                    {
+                        tokenNotBuilt = result.initToken(le_op, source->getPosition());
+                        source->take();
+                    } else
+                        tokenNotBuilt = result.initToken(lt_op, source->getPosition());
+                    break;
+                case '=':
+                    source->take();
+                    c = source->peek();
+                    if (c == '=')
+                    {
+                        tokenNotBuilt = result.initToken(equal_op, source->getPosition());
+                        source->take();
+                    } else
+                        tokenNotBuilt = result.initToken(assign_op, source->getPosition());
+                    break;
+                    //1-character operators
+                    //----------------------------------------------------------------------------------------------------------
                 case '+':
                     tokenNotBuilt = result.initToken(plus_op, source->getPosition());
                     source->take();
@@ -126,14 +168,6 @@ Token Lexer::nextToken()
                     break;
                 case '*':
                     tokenNotBuilt = result.initToken(mul_op, source->getPosition());
-                    source->take();
-                    break;
-                case '>':
-                    tokenNotBuilt = result.initToken(gt_op, source->getPosition());
-                    source->take();
-                    break;
-                case '<':
-                    tokenNotBuilt = result.initToken(lt_op, source->getPosition());
                     source->take();
                     break;
                 case '(':
@@ -154,10 +188,6 @@ Token Lexer::nextToken()
                     break;
                 case '!':
                     tokenNotBuilt = result.initToken(not_op, source->getPosition());
-                    source->take();
-                    break;
-                case '=':
-                    tokenNotBuilt = result.initToken(assign_op, source->getPosition());
                     source->take();
                     break;
                 case ';':
@@ -206,9 +236,9 @@ bool Lexer::isAphaNum(char c)
 int Lexer::isKeyword(std::string str)
 {
     int position = 0;
-    for(const auto& i: keywords)
+    for (const auto &i: keywords)
     {
-        if(str == i.name)
+        if (str == i.name)
             return position;
 
         position++;
@@ -218,7 +248,7 @@ int Lexer::isKeyword(std::string str)
 
 void Lexer::skipLine(char &c)
 {
-    while(c != '\n')
+    while (c != '\n')
     {
         source->take();
         c = source->peek();

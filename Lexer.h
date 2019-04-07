@@ -24,7 +24,6 @@ enum LexType
 };
 
 
-
 struct Token
 {
     LexType type;
@@ -43,26 +42,31 @@ struct Keyword
     std::string name;
     LexType type;
 
-    Keyword(const std::string& name, LexType type);
+    Keyword(const std::string &name, LexType type);
 };
 
 class Lexer
 {
 public:
-    explicit Lexer(Source* source);
+    explicit Lexer(Source *source);
 
     Token nextToken();
 
 private:
-    Source* source;
+    Source *source;
     std::vector<Keyword> keywords;
 
     bool isWhitespace(char c);
+
     bool isAlpha(char c);
+
     bool isDigit(char c);
+
     bool isAphaNum(char c);
+
     int isKeyword(std::string str);
-    void skipLine(char& c);
+
+    void skipLine(char &c);
 };
 
 
