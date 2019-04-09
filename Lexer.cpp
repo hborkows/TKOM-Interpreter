@@ -6,7 +6,6 @@
 
 Token::Token() : value(), text(), type(), position()
 {
-    isError = false;
 }
 
 bool Token::initToken(LexType type, TextPosition position, std::string text, int value)
@@ -123,6 +122,7 @@ Token Lexer::nextToken()
                         source->take();
                         c = source->peek();
                     }
+                    source->take();
                     tokenNotBuilt = result.initToken(text_const, source->getPosition(), buffer);
                     break;
                     //2-character operators
@@ -206,7 +206,6 @@ Token Lexer::nextToken()
                     //--------------------------------------------------------------------------------------------------
                 default: //not a part of the language => not a valid token, error
                     tokenNotBuilt = result.initToken(unknown, source->getPosition());
-                    result.isError = true;
                     break;
             }
         }

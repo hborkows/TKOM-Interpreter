@@ -31,7 +31,6 @@ struct Token
     TextPosition position;
     std::string text;
     int value;
-    bool isError;
 
     Token();
 
@@ -57,13 +56,13 @@ private:
     Source *source;
     std::vector<Keyword> keywords;
 
-    bool isWhitespace(char c);
+    bool static isWhitespace(char c);
 
-    bool isAlpha(char c);
+    bool static isAlpha(char c);
 
-    bool isDigit(char c);
+    bool static isDigit(char c);
 
-    bool isAphaNum(char c);
+    bool static isAphaNum(char c);
 
     int isKeyword(std::string str);
 
