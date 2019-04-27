@@ -38,176 +38,24 @@ Lexer::Lexer(Source *source) : source(source)
 Token Lexer::nextToken()
 {
     Token result;
-    char c;
-    std::string buffer = std::string();
 
-    c = source->peek();
-
-    //Skip whitespaces
-    while (isWhitespace(c))
-    {
-        source->take();
-        c = source->peek();
-    }
+    skipWhitespace();
 
     //check if comment or division operator when given '\'
-    if (c == '\\')
-    {
-        source->take();
-        c = source->peek();
-        if (c == '\\')
-        {
-            skipLine(c);
-        } else
-        {
-            result.initToken(div_op, source->getPosition());
-        }
-        source->take();
-    }
+    checkIfCommentOrDivision(result);
 
-        //check if keyword or a variable name or a function name
-    else if (isAlpha(c))
-    {
-        buffer += c;
-        source->take();
-        c = source->peek();
+    //check if keyword or a variable name or a function name
+    checkIfKeywordOrID(result);
 
-        while (isAphaNum(c))
-        {
-            buffer += c;
-            source->take();
-            c = source->peek();
-        }
+    //check if numerical value
+    checkIfNumber(result);
 
-        int index = isKeyword(buffer);
+    //check if text constant
+    checkIfString(result);
+    
+    checkIfTwoCharOperator(result);
 
-        if (index != -1) //buffer contains a keyword identified by index
-        {
-            result.initToken(keywords[index].type, source->getPosition());
-        } else //buffer contains variable or function id
-        {
-            result.initToken(id, source->getPosition(), buffer);
-        }
-    }
-
-        //check if numerical value
-    else if (isDigit(c))
-    {
-        buffer += c;
-        source->take();
-        c = source->peek();
-
-        while (isDigit(c))
-        {
-            buffer += c;
-            source->take();
-            c = source->peek();
-        }
-
-        result.initToken(int_const, source->getPosition(), std::string(), std::stoi(buffer));
-    } else
-    {
-        switch (c)
-        {
-            //text constant
-            //------------------------------------------------------------------------------------------------------
-            case '\"':
-                source->take();
-                c = source->peek();
-                while (c != '\"')
-                {
-                    buffer += c;
-                    source->take();
-                    c = source->peek();
-                }
-                result.initToken(text_const, source->getPosition(), buffer);
-                break;
-                //2-character operators
-                //--------------------------------------------------------------------------------------------------
-            case '>':
-                source->take();
-                c = source->peek();
-                if (c == '=')
-                {
-                    result.initToken(ge_op, source->getPosition());
-                    source->take();
-                } else
-                    result.initToken(gt_op, source->getPosition());
-                break;
-            case '<':
-                source->take();
-                c = source->peek();
-                if (c == '=')
-                {
-                    result.initToken(le_op, source->getPosition());
-                    source->take();
-                } else
-                    result.initToken(lt_op, source->getPosition());
-                break;
-            case '=':
-                source->take();
-                c = source->peek();
-                if (c == '=')
-                {
-                    result.initToken(equal_op, source->getPosition());
-                    source->take();
-                } else
-                    result.initToken(assign_op, source->getPosition());
-                break;
-                //1-character operators
-                //--------------------------------------------------------------------------------------------------
-            case '+':
-                result.initToken(plus_op, source->getPosition());
-                source->take();
-                break;
-            case '-':
-                result.initToken(minus_op, source->getPosition());
-                source->take();
-                break;
-            case '*':
-                result.initToken(mul_op, source->getPosition());
-                source->take();
-                break;
-            case '(':
-                result.initToken(lbracket, source->getPosition());
-                source->take();
-                break;
-            case ')':
-                result.initToken(rbracket, source->getPosition());
-                source->take();
-                break;
-            case '{':
-                result.initToken(lcurlbracket, source->getPosition());
-                source->take();
-                break;
-            case '}':
-                result.initToken(rcurlbracket, source->getPosition());
-                source->take();
-                break;
-            case '!':
-                result.initToken(not_op, source->getPosition());
-                source->take();
-                break;
-            case ';':
-                result.initToken(semicolon, source->getPosition());
-                source->take();
-                break;
-            case ',':
-                result.initToken(comma, source->getPosition());
-                source->take();
-                break;
-            case '$':
-                result.initToken(end_of_code, source->getPosition());
-                source->take();
-                break;
-                //--------------------------------------------------------------------------------------------------
-            default: //not a part of the language => not a valid token, error
-                result.initToken(unknown, source->getPosition());
-                result.isError = true;
-                break;
-        }
-    }
-
+    checkIfOneCharOperator(result);
 
     return result;
 }
@@ -245,12 +93,216 @@ int Lexer::isKeyword(std::string str)
     return -1;
 }
 
-void Lexer::skipLine(char &c)
+void Lexer::skipLine()
 {
-    while (c != '\n')
+    while (source->peek() != '\n')
     {
         source->take();
-        c = source->peek();
     }
 }
 
+void Lexer::skipWhitespace()
+{
+    while (isWhitespace(source->peek()))
+    {
+        source->take();
+    }
+}
+
+void Lexer::checkIfCommentOrDivision(Token& token)
+{
+    TextPosition tokenStart = source->getPosition();
+    if (source->peek() == '\\')
+    {
+        source->take();
+        if (source->peek() == '\\')
+        {
+            skipLine();
+        }
+        else
+        {
+            token.initToken(div_op, tokenStart);
+        }
+        source->take();
+    }
+}
+
+void Lexer::checkIfKeywordOrID(Token& token)
+{
+    char c = source->peek();
+    std::string buffer = std::string();
+    TextPosition tokenStart = source->getPosition();
+
+    if (isAlpha(c))
+    {
+        buffer += c;
+        source->take();
+        c = source->peek();
+
+        while (isAphaNum(c))
+        {
+            buffer += c;
+            source->take();
+            c = source->peek();
+        }
+
+        int index = isKeyword(buffer);
+
+        if (index != -1) //buffer contains a keyword identified by index
+        {
+            token.initToken(keywords[index].type, tokenStart);
+        }
+        else //buffer contains variable or function id
+        {
+            token.initToken(id, tokenStart, buffer);
+        }
+    }
+}
+
+void Lexer::checkIfNumber(Token& token)
+{
+    char c = source->peek();
+    std::string buffer = std::string();
+    TextPosition tokenStart = source->getPosition();
+
+    if (isDigit(c))
+    {
+        buffer += c;
+        source->take();
+        c = source->peek();
+
+        while (isDigit(c))
+        {
+            buffer += c;
+            source->take();
+            c = source->peek();
+        }
+
+        token.initToken(int_const, tokenStart, std::string(), std::stoi(buffer));
+    }
+}
+
+void Lexer::checkIfString(Token& token)
+{
+    char c = source->peek();
+    std::string buffer = std::string();
+    TextPosition tokenStart = source->getPosition();
+
+    if(c == '\"')
+    {
+        source->take();
+        c = source->peek();
+        while (c != '\"')
+        {
+            buffer += c;
+            source->take();
+            c = source->peek();
+        }
+        token.initToken(text_const, tokenStart, buffer);
+    }
+}
+
+void Lexer::checkIfTwoCharOperator(Token &token)
+{
+    char c = source->peek();
+    std::string buffer = std::string();
+    TextPosition tokenStart = source->getPosition();
+    
+    switch(c)
+    {
+        case '>':
+            source->take();
+            c = source->peek();
+            if (c == '=')
+            {
+                token.initToken(ge_op, tokenStart);
+                source->take();
+            }
+            else
+                token.initToken(gt_op, tokenStart);
+            break;
+        case '<':
+            source->take();
+            c = source->peek();
+            if (c == '=')
+            {
+                token.initToken(le_op, tokenStart);
+                source->take();
+            }
+            else
+                token.initToken(lt_op, tokenStart);
+            break;
+        case '=':
+            source->take();
+            c = source->peek();
+            if (c == '=')
+            {
+                token.initToken(equal_op, tokenStart);
+                source->take();
+            }
+            else
+                token.initToken(assign_op, tokenStart);
+            break;
+        default:
+            break;
+    }
+}
+
+void Lexer::checkIfOneCharOperator(Token &token)
+{
+    char c = source->peek();
+    std::string buffer = std::string();
+    TextPosition tokenStart = source->getPosition();
+    
+    switch(c)
+    {
+        case '+':
+            token.initToken(plus_op, tokenStart);
+            source->take();
+            break;
+        case '-':
+            token.initToken(minus_op, tokenStart);
+            source->take();
+            break;
+        case '*':
+            token.initToken(mul_op, tokenStart);
+            source->take();
+            break;
+        case '(':
+            token.initToken(lbracket, tokenStart);
+            source->take();
+            break;
+        case ')':
+            token.initToken(rbracket, tokenStart);
+            source->take();
+            break;
+        case '{':
+            token.initToken(lcurlbracket, tokenStart);
+            source->take();
+            break;
+        case '}':
+            token.initToken(rcurlbracket, tokenStart);
+            source->take();
+            break;
+        case '!':
+            token.initToken(not_op, tokenStart);
+            source->take();
+            break;
+        case ';':
+            token.initToken(semicolon, tokenStart);
+            source->take();
+            break;
+        case ',':
+            token.initToken(comma, tokenStart);
+            source->take();
+            break;
+        case '$':
+            token.initToken(end_of_code, tokenStart);
+            source->take();
+            break;
+        default: //not a part of the language => not a valid token, error
+            token.initToken(unknown, tokenStart);
+            token.isError = true;
+            break;
+    }
+}
