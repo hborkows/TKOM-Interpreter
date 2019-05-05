@@ -22,7 +22,8 @@ public:
         function_definition,
         rvalue,
         lvalue,
-        block
+        block,
+        condition
     };
 
     virtual Type getType() const = 0;
