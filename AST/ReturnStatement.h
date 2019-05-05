@@ -6,10 +6,16 @@
 #define TKOM_INTERPRETER_RETURNSTATEMENT_H
 
 #include "ASTNode.h"
+#include "Assignable.h"
 
 class ReturnStatement: public ASTNode
 {
+public:
+    void setAssignableNode(Assignable* assignable) {assignableNode = assignable;}
 
+    Type getType() const override {return ASTNode::Type::return_statement;}
+protected:
+    Assignable* assignableNode;
 };
 
 
