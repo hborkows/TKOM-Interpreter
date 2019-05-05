@@ -21,9 +21,10 @@ public:
         function_call,
         function_definition,
         rvalue,
-        lvalue,
+        assignable,
         block,
-        condition
+        condition,
+        expression
     };
 
     virtual Type getType() const = 0;
