@@ -12,6 +12,8 @@
 class VariableDeclaration: public Lvalue
 {
 public:
+    ~VariableDeclaration() {delete value;}
+
     void setName(std::string name) {this->name = name;}
 
     void setValue(Assignable* value) {this->value = value;}

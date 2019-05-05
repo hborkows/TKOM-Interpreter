@@ -6,11 +6,23 @@
 #define TKOM_INTERPRETER_FUNCTIONCALL_H
 
 
+#include <string>
+#include <vector>
 #include "Assignable.h"
 
 class FunctionCall: public Assignable
 {
+public:
+    FunctionCall() {arguments = std::vector<Assignable*>();};
 
+    void setName(std::string name) {this->name = name;}
+
+    void addArgument(Assignable* arg) {arguments.push_back(arg);}
+
+    Type getType() const override {return ASTNode::Type::function_call;}
+protected:
+    std::string name;
+    std::vector<Assignable*> arguments;
 };
 
 

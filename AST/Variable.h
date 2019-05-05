@@ -11,6 +11,9 @@
 
 class Variable: public Assignable, public Lvalue
 {
+public:
+
+protected:
 
 };
 
