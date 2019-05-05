@@ -51,6 +51,8 @@ class Lexer
 public:
     explicit Lexer(Source *source);
 
+    ~Lexer();
+
     Token nextToken();
 
 private:

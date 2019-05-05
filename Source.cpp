@@ -11,6 +11,11 @@ Source::Source(const std::string &fileName) : fileName(fileName), firstNotConsum
     position.column = 0;
 }
 
+Source::~Source()
+{
+    fin.close();
+}
+
 char Source::peek()
 {
     if (firstNotConsumed == 0)

@@ -35,6 +35,11 @@ Lexer::Lexer(Source *source) : source(source)
     };
 }
 
+Lexer::~Lexer()
+{
+    delete source;
+}
+
 Token Lexer::nextToken()
 {
     Token result;
