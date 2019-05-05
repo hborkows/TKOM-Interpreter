@@ -3,4 +3,4 @@ project(TKOM_Interpreter)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(TKOM_Interpreter main.cpp Source.cpp Source.h Lexer.cpp Lexer.h AST/ASTNode.h)
+add_executable(TKOM_Interpreter main.cpp Source.cpp Source.h Lexer.cpp Lexer.h AST/ASTNode.h AST/Lvalue.cpp AST/Lvalue.h AST/Rvalue.cpp AST/Rvalue.h AST/Variable.cpp AST/Variable.h AST/VariableDeclaration.cpp AST/VariableDeclaration.h AST/FunctionCall.cpp AST/FunctionCall.h AST/Assignment.cpp AST/Assignment.h AST/ReturnStatement.cpp AST/ReturnStatement.h AST/WhileStatement.cpp AST/WhileStatement.h AST/ForStatement.cpp AST/ForStatement.h AST/IfStatement.cpp AST/IfStatement.h)

@@ -26,6 +26,9 @@ public:
     };
 
     virtual Type getType() const = 0;
+
+protected:
+    ASTNode* parent;
 };
 
 
