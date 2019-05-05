@@ -6,10 +6,10 @@
 #define TKOM_INTERPRETER_VARIABLE_H
 
 
-#include "Rvalue.h"
+#include "Assignable.h"
 #include "Lvalue.h"
 
-class Variable: public Rvalue, public Lvalue
+class Variable: public Assignable, public Lvalue
 {
 
 };

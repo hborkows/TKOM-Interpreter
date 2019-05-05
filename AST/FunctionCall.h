@@ -6,9 +6,9 @@
 #define TKOM_INTERPRETER_FUNCTIONCALL_H
 
 
-#include "Rvalue.h"
+#include "Assignable.h"
 
-class FunctionCall: public Rvalue
+class FunctionCall: public Assignable
 {
 
 };
