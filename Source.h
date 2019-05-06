@@ -23,7 +23,7 @@ public:
 
     char peek();
 
-    char take();
+    void take();
 
     TextPosition getPosition()
     { return position; }

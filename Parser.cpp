@@ -19,8 +19,18 @@ ASTNode *Parser::parse()
     return nullptr;
 }
 
+void Parser::getNextToken()
+{
+    bufferedToken = lexer->nextToken();
+}
+
 bool Parser::accept(const Token &token, const std::initializer_list<Token> &acceptable)
 {
+    for(auto it: acceptable)
+    {
+        if(it.type == token.type)
+            return true;
+    }
     return false;
 }
 

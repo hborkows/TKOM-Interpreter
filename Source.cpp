@@ -24,14 +24,12 @@ char Source::peek()
     return firstNotConsumed;
 }
 
-char Source::take()
+void Source::take()
 {
     if (firstNotConsumed == 0)
         readCharFromFile();
 
-    char tmp = firstNotConsumed;
     readCharFromFile();
-    return tmp;
 }
 
 void Source::readCharFromFile()
