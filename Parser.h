@@ -37,6 +37,8 @@ private:
 
     bool accept(const Token& token, const std::initializer_list<Token>& acceptable);
 
+    StatementBlock* parseBlock();
+
     Assignable* parseAssignable();
 
     Assignment* parseAssignment();

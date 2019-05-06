@@ -16,7 +16,8 @@ Parser::~Parser()
 
 ASTNode *Parser::parse()
 {
-    return nullptr;
+    auto* program = new StatementBlock();
+
 }
 
 void Parser::getNextToken()
@@ -34,57 +35,62 @@ bool Parser::accept(const Token &token, const std::initializer_list<Token> &acce
     return false;
 }
 
+StatementBlock *Parser::parseBlock()
+{
+    //TODO
+}
+
 Assignable *Parser::parseAssignable()
 {
-    return nullptr;
+    //TODO
 }
 
 Assignment *Parser::parseAssignment()
 {
-    return nullptr;
+    //TODO
 }
 
 Condition *Parser::parseCondition()
 {
-    return nullptr;
+    //TODO
 }
 
 Expression *Parser::parseExpression()
 {
-    return nullptr;
+    //TODO
 }
 
 ForStatement *Parser::parseForStatement()
 {
-    return nullptr;
+    //TODO
 }
 
 FunctionCall *Parser::parseFunCall()
 {
-    return nullptr;
+    //TODO
 }
 
 IfStatement *Parser::parseIfStatement()
 {
-    return nullptr;
+    //TODO
 }
 
 ReturnStatement *Parser::parseReturnStatement()
 {
-    return nullptr;
+    //TODO
 }
 
 Variable *Parser::parseVariable()
 {
-    return nullptr;
+    //TODO
 }
 
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
-    return nullptr;
+    //TODO
 }
 
 WhileStatement *Parser::parseWhileStatement()
 {
-    return nullptr;
+    //TODO
 }

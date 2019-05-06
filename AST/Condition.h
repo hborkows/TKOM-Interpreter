@@ -14,7 +14,7 @@ class Condition: public Assignable
 public:
     Condition() = default;
 
-    void setNegated(bool flag) {negated = flag};
+    void setNegated(bool flag) {negated = flag;}
 
     void setOperation(const LexType& operation) {this->operation = operation;}
 
