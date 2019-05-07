@@ -31,6 +31,7 @@ struct Token
     TextPosition position;
     std::string text;
     int value;
+    bool isError;
 
     Token();
 

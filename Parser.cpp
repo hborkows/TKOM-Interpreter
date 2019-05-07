@@ -17,6 +17,7 @@ Parser::~Parser()
 ASTNode *Parser::parse()
 {
     auto* program = new StatementBlock();
+	getNextToken();
 
 }
 
@@ -25,14 +26,18 @@ void Parser::getNextToken()
     bufferedToken = lexer->nextToken();
 }
 
-bool Parser::accept(const Token &token, const std::initializer_list<Token> &acceptable)
+void Parser::accept(const std::initializer_list<LexType> &acceptable)
 {
     for(auto it: acceptable)
     {
-        if(it.type == token.type)
-            return true;
+        if(it == bufferedToken.type)
+		{
+			getNextToken();
+			return;
+		}
     }
-    return false;
+
+	//Throw error
 }
 
 StatementBlock *Parser::parseBlock()
@@ -62,7 +67,15 @@ Expression *Parser::parseExpression()
 
 ForStatement *Parser::parseForStatement()
 {
-    //TODO
+    ForStatement* node = new ForStatement();
+
+	accept({LexType::for_kw});
+
+	node->setVariable(parseVariable());
+
+	accept({LexType::in_kw});
+
+	//TODO
 }
 
 FunctionCall *Parser::parseFunCall()
@@ -77,7 +90,15 @@ IfStatement *Parser::parseIfStatement()
 
 ReturnStatement *Parser::parseReturnStatement()
 {
-    //TODO
+    ReturnStatement* node = new ReturnStatement();
+
+	accept({LexType::return_kw});
+
+    node->setAssignableNode(parseAssignable());
+
+	accept({LexType::semicolon});
+
+	return node;
 }
 
 Variable *Parser::parseVariable()
@@ -87,10 +108,30 @@ Variable *Parser::parseVariable()
 
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
-    //TODO
+	VariableDeclaration* node = new VariableDeclaration();
+
+	accept({LexType::int_kw, LexType::string_kw, LexType::log_kw});
+
+	//TODO
 }
 
 WhileStatement *Parser::parseWhileStatement()
 {
-    //TODO
+    WhileStatement* node = new WhileStatement();
+
+	accept({LexType::while_kw});
+
+	accept({LexType::rbracket});
+
+	node->setCondition(parseCondition());
+
+	accept({LexType::lbracket});
+
+	accept({LexType::rcurlbracket});
+
+	node->setBlock(parseBlock());
+
+	accept({LexType::lcurlbracket});
+
+	return node;
 }

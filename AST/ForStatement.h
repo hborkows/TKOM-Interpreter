@@ -16,11 +16,9 @@ class ForStatement: public ASTNode
 public:
     ForStatement() = default;
 
-    ~ForStatement() {delete block; delete condition; delete variable;}
+    ~ForStatement() {delete block;  delete variable;}
 
     void setBlock(StatementBlock* block) {this->block = block;}
-
-    void setCondition(Condition* cond) {condition = cond;}
 
     void setVariable(Variable* var) {variable = var;}
 
@@ -28,7 +26,7 @@ public:
 
 protected:
     StatementBlock* block;
-    Condition* condition;
+  	//TODO collection type
     Variable* variable;
 };
 

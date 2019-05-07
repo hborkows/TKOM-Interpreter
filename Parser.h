@@ -35,7 +35,7 @@ private:
 
     void getNextToken();
 
-    bool accept(const Token& token, const std::initializer_list<Token>& acceptable);
+    void accept(const std::initializer_list<LexType>& acceptable);
 
     StatementBlock* parseBlock();
 
