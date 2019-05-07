@@ -11,6 +11,11 @@ Source::Source(const std::string &fileName) : fileName(fileName), firstNotConsum
     position.column = 0;
 }
 
+Source::~Source()
+{
+    fin.close();
+}
+
 char Source::peek()
 {
     if (firstNotConsumed == 0)
@@ -19,14 +24,12 @@ char Source::peek()
     return firstNotConsumed;
 }
 
-char Source::take()
+void Source::take()
 {
     if (firstNotConsumed == 0)
         readCharFromFile();
 
-    char tmp = firstNotConsumed;
     readCharFromFile();
-    return tmp;
 }
 
 void Source::readCharFromFile()

@@ -50,6 +50,8 @@ class Lexer
 public:
     explicit Lexer(Source *source);
 
+    ~Lexer();
+
     Token nextToken();
 
 private:
@@ -66,7 +68,21 @@ private:
 
     int isKeyword(std::string str);
 
-    void skipLine(char &c);
+    void skipLine();
+
+    void skipWhitespace();
+
+    void checkIfCommentOrDivision(Token& token);
+
+    void checkIfKeywordOrID(Token& token);
+
+    void checkIfNumber(Token& token);
+
+    void checkIfString(Token& token);
+
+    void checkIfTwoCharOperator(Token& token);
+
+    void checkIfOneCharOperator(Token& token);
 };
 
 

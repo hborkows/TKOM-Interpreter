@@ -19,9 +19,11 @@ class Source
 public:
     explicit Source(const std::string &fileName);
 
+    ~Source();
+
     char peek();
 
-    char take();
+    void take();
 
     TextPosition getPosition()
     { return position; }
