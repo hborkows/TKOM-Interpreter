@@ -15,7 +15,7 @@ class WhileStatement: public Statement
 public:
     WhileStatement() = default;
 
-    ~WhileStatement() {delete block; delete condition;}
+    ~WhileStatement() {delete statement; delete condition;}
 
     void setStatement(Statement* statement) {this->statement = statement;}
 

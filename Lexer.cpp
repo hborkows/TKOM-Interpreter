@@ -80,7 +80,7 @@ bool Lexer::isDigit(char c)
     return c >= '0' && c <= '9';
 }
 
-bool Lexer::isAphaNum(char c)
+bool Lexer::isAlphaNum(char c)
 {
     return isAlpha(c) || isDigit(c);
 }
@@ -144,7 +144,7 @@ void Lexer::checkIfKeywordOrID(Token& token)
         source->take();
         c = source->peek();
 
-        while (isAphaNum(c))
+        while (isAlphaNum(c))
         {
             buffer += c;
             source->take();

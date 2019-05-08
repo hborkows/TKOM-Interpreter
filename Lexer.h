@@ -65,7 +65,7 @@ private:
 
     bool static isDigit(char c);
 
-    bool static isAphaNum(char c);
+    bool static isAlphaNum(char c);
 
     int isKeyword(std::string str);
 

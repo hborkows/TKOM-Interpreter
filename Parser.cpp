@@ -41,6 +41,16 @@ bool Parser::accept(const std::initializer_list<LexType> &acceptable)
 	return false;
 }
 
+bool Parser::peek(const std::initializer_list<LexType>& acceptable)
+{
+    for(auto it: acceptable)
+    {
+        if(it == bufferedToken.type)
+            return true;
+    }
+    return false;
+}
+
 StatementBlock *Parser::parseBlock()
 {
     //TODO
@@ -86,9 +96,37 @@ ForStatement *Parser::parseForStatement()
 	node->setBlock(parseStatement());
 }
 
-FunctionCall *Parser::parseFunCall()
+FunctionCall *Parser::parseFunCall(const std::string& id)
 {
-    //TODO
+    FunctionCall* node = new FunctionCall();
+
+    node->setName(id);
+
+    accept({LexType::lbracket});
+
+    if(peek({LexType::rbracket}))
+    {
+        accept({LexType::rbracket});
+        return node;
+    }
+
+    while(true)
+    {
+        node->addArgument(parseAssignable());
+
+        if(peek({LexType::rbracket}))
+        {
+            accept({LexType::rbracket});
+            break;
+        }
+        if(peek({LexType::comma}))
+        {
+            node->addArgument(parseAssignable());
+            continue;
+        }
+    }
+
+    return node;
 }
 
 IfStatement *Parser::parseIfStatement()

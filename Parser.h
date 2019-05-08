@@ -40,6 +40,8 @@ private:
 
     bool accept(const std::initializer_list<LexType>& acceptable);
 
+    bool peek(const std::initializer_list<LexType>& acceptable);
+
     StatementBlock* parseBlock();
 
     Statement* parseStatement();
@@ -54,7 +56,7 @@ private:
 
     ForStatement* parseForStatement();
 
-    FunctionCall* parseFunCall();
+    FunctionCall* parseFunCall(const std::string& id);
 
     IfStatement* parseIfStatement();
 
