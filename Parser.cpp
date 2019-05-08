@@ -51,6 +51,54 @@ bool Parser::peek(const std::initializer_list<LexType>& acceptable)
     return false;
 }
 
+FunctionDefinition* Parser::parseFunctionDefinition()
+{
+    FunctionDefinition* node = new FunctionDefinition();
+
+    if(peek({LexType::id}))
+    {
+        node->setName(bufferedToken.text);
+        accept({LexType::id});
+    }
+    else
+    {
+        return nullptr;
+    }
+
+    accept({LexType::lbracket});
+
+    if(peek({LexType::rbracket}))
+    {
+        accept({LexType::rbracket});
+
+        node->setStatement(parseStatement());
+
+        return node;
+    }
+
+    while(true)
+    {
+        if (peek({LexType::id}))
+        {
+            node->addParameter(bufferedToken.text);
+            accept({LexType::id});
+        }
+        else if (peek({LexType::comma}))
+        {
+            accept({LexType::comma});
+            continue;
+        }
+        else if (peek({LexType::rbracket}))
+        {
+            break;
+        }
+    }
+
+    node->setStatement(parseStatement());
+
+    return node;
+}
+
 StatementBlock *Parser::parseBlock()
 {
     //TODO

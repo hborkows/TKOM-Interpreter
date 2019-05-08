@@ -19,6 +19,7 @@
 #include "AST/VariableDeclaration.h"
 #include "AST/WhileStatement.h"
 #include "Tracer.h"
+#include "AST/FunctionDefinition.h"
 
 class Parser
 {
@@ -41,6 +42,8 @@ private:
     bool accept(const std::initializer_list<LexType>& acceptable);
 
     bool peek(const std::initializer_list<LexType>& acceptable);
+
+    FunctionDefinition* parseFunctionDefinition();
 
     StatementBlock* parseBlock();
 
