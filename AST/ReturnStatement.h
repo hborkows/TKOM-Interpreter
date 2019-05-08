@@ -8,7 +8,7 @@
 #include "ASTNode.h"
 #include "Assignable.h"
 
-class ReturnStatement: public ASTNode
+class ReturnStatement: public Statement
 {
 public:
     void setAssignableNode(Assignable* assignable) {assignableNode = assignable;}

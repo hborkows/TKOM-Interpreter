@@ -11,21 +11,21 @@
 #include "StatementBlock.h"
 #include "Variable.h"
 
-class ForStatement: public ASTNode
+class ForStatement: public Statement
 {
 public:
     ForStatement() = default;
 
-    ~ForStatement() {delete block;  delete variable;}
+    ~ForStatement() {delete statement;  delete variable;}
 
-    void setBlock(StatementBlock* block) {this->block = block;}
+    void setBlock(Statement* statement) {this->statement = statement;}
 
     void setVariable(Variable* var) {variable = var;}
 
     Type getType() const override {return ASTNode::Type::for_statement;}
 
 protected:
-    StatementBlock* block;
+    Statement* statement;
   	//TODO collection type
     Variable* variable;
 };

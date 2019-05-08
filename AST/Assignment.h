@@ -8,7 +8,7 @@
 #include "Assignable.h"
 #include "Variable.h"
 
-class Assignment: public Assignable
+class Assignment: public Assignable, public Statement
 {
 public:
     Assignment() = default;

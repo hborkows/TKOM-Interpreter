@@ -7,18 +7,19 @@
 
 #include <vector>
 #include "ASTNode.h"
+#include "Statement.h"
 
-class StatementBlock: public ASTNode
+class StatementBlock: public Statement
 {
 public:
-    void addStatement(ASTNode* statement) {statements.push_back(statement);}
+    void addStatement(Statement* statement) {statements.push_back(statement);}
 
     void setLevel(size_t level) {this->level = level;}
 
     Type getType() const override {return ASTNode::Type::block;}
 
 protected:
-    std::vector<ASTNode*> statements;
+    std::vector<Statement*> statements;
     size_t level;
 };
 

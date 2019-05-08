@@ -24,7 +24,8 @@ public:
         assignable,
         block,
         condition,
-        expression
+        expression,
+        statement
     };
 
     virtual Type getType() const = 0;

@@ -10,7 +10,7 @@
 #include <vector>
 #include "Assignable.h"
 
-class FunctionCall: public Assignable
+class FunctionCall: public Assignable, public Statement
 {
 public:
     FunctionCall() {arguments = std::vector<Assignable*>();};

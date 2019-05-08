@@ -5,9 +5,9 @@
 #ifndef TKOM_INTERPRETER_LVALUE_H
 #define TKOM_INTERPRETER_LVALUE_H
 
-#include "ASTNode.h"
+#include "Statement.h"
 
-class Lvalue: public ASTNode
+class Lvalue: public Statement
 {
 
 };

@@ -10,23 +10,22 @@
 #include "StatementBlock.h"
 #include "Condition.h"
 
-class IfStatement: public ASTNode
+class IfStatement: public Statement
 {
 public:
-    IfStatement()
-    {
-        blocks = std::vector<StatementBlock*>();
-        conditions = std::vector<Condition*>();
-    }
+    ~IfStatement() {delete trueStatement; delete falseStatement; delete condition;}
 
-    void addBlock(StatementBlock* block) {blocks.push_back(block);}
+    void setTrueStatement(Statement* statement) {this->trueStatement = statement;}
 
-    void addCondition(Condition* condition) {conditions.push_back(condition);}
+    void setFalseStatement(Statement* statement) {this->falseStatement = statement;}
+
+    void addCondition(Condition* condition) {this->condition = condition;}
 
     Type getType() const override {return ASTNode::Type::if_statement;}
 protected:
-    std::vector<StatementBlock*> blocks;
-    std::vector<Condition*> conditions;
+    Statement* trueStatement;
+    Statement* falseStatement;
+    Condition* condition;
 };
 
 
