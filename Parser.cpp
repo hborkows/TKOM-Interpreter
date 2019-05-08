@@ -121,7 +121,7 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
         }
         if(peek({LexType::comma}))
         {
-            node->addArgument(parseAssignable());
+            accept({LexType::comma});
             continue;
         }
     }
