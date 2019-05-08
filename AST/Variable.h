@@ -6,15 +6,19 @@
 #define TKOM_INTERPRETER_VARIABLE_H
 
 
+#include <string>
 #include "Assignable.h"
 #include "Lvalue.h"
 
 class Variable: public Assignable, public Lvalue
 {
 public:
+    Type getType() const override {return Type::variable;}
+
+    void setName(std::string name) {this->name = name;}
 
 protected:
-
+    std::string name;
 };
 
 
