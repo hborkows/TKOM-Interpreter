@@ -17,14 +17,14 @@ public:
 
     ~WhileStatement() {delete block; delete condition;}
 
-    void setBlock(Statement* block) {this->block = block;}
+    void setStatement(Statement* statement) {this->statement = statement;}
 
     void setCondition(Condition* cond) {condition = cond;}
 
     Type getType() const override {return ASTNode::Type::while_statement;}
 
 protected:
-    Statement* block;
+    Statement* statement;
     Condition* condition;
 };
 

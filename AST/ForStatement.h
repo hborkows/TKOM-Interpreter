@@ -10,6 +10,7 @@
 #include "Condition.h"
 #include "StatementBlock.h"
 #include "Variable.h"
+#include "LogVar.h"
 
 class ForStatement: public Statement
 {
@@ -22,11 +23,13 @@ public:
 
     void setVariable(Variable* var) {variable = var;}
 
+    void setCollection(LogVar* collection) {this->collection = collection;}
+
     Type getType() const override {return ASTNode::Type::for_statement;}
 
 protected:
     Statement* statement;
-  	//TODO collection type
+  	LogVar* collection;
     Variable* variable;
 };
 

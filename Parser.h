@@ -18,6 +18,7 @@
 #include "AST/ReturnStatement.h"
 #include "AST/VariableDeclaration.h"
 #include "AST/WhileStatement.h"
+#include "Tracer.h"
 
 class Parser
 {
@@ -31,13 +32,17 @@ public:
 private:
     Lexer* lexer;
 
+    Tracer* tracer;
+
     Token bufferedToken;
 
     void getNextToken();
 
-    void accept(const std::initializer_list<LexType>& acceptable);
+    bool accept(const std::initializer_list<LexType>& acceptable);
 
     StatementBlock* parseBlock();
+
+    Statement* parseStatement();
 
     Assignable* parseAssignable();
 
@@ -56,6 +61,8 @@ private:
     ReturnStatement* parseReturnStatement();
 
     Variable* parseVariable();
+
+    LogVar* parseCollection();
 
     VariableDeclaration* parseVariableDeclaration();
 

@@ -19,7 +19,7 @@ public:
 
     void setFalseStatement(Statement* statement) {this->falseStatement = statement;}
 
-    void addCondition(Condition* condition) {this->condition = condition;}
+    void setCondition(Condition* condition) {this->condition = condition;}
 
     Type getType() const override {return ASTNode::Type::if_statement;}
 protected:

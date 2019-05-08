@@ -4,7 +4,7 @@
 
 #include "Parser.h"
 
-Parser::Parser(Lexer *lexer): bufferedToken()
+Parser::Parser(Lexer *lexer): bufferedToken(), tracer()
 {
     this->lexer = lexer;
 }
@@ -26,21 +26,27 @@ void Parser::getNextToken()
     bufferedToken = lexer->nextToken();
 }
 
-void Parser::accept(const std::initializer_list<LexType> &acceptable)
+bool Parser::accept(const std::initializer_list<LexType> &acceptable)
 {
     for(auto it: acceptable)
     {
         if(it == bufferedToken.type)
 		{
 			getNextToken();
-			return;
+			return true;
 		}
     }
 
 	//Throw error
+	return false;
 }
 
 StatementBlock *Parser::parseBlock()
+{
+    //TODO
+}
+
+Statement *Parser::parseStatement()
 {
     //TODO
 }
@@ -75,7 +81,9 @@ ForStatement *Parser::parseForStatement()
 
 	accept({LexType::in_kw});
 
-	//TODO
+	node->setCollection(parseCollection());
+
+	node->setBlock(parseStatement());
 }
 
 FunctionCall *Parser::parseFunCall()
@@ -85,7 +93,28 @@ FunctionCall *Parser::parseFunCall()
 
 IfStatement *Parser::parseIfStatement()
 {
-    //TODO
+    IfStatement* node = new IfStatement();
+
+    accept({LexType::if_kw});
+
+    accept({LexType::lbracket});
+
+    node->setCondition(parseCondition());
+
+    tracer->enterBlock();
+
+    node->setTrueStatement(parseStatement());
+
+    tracer->exitBlock();
+
+    if(accept({LexType::else_kw}))
+    {
+        tracer->enterBlock();
+        node->setFalseStatement(parseStatement());
+        tracer->exitBlock();
+    }
+
+    return node;
 }
 
 ReturnStatement *Parser::parseReturnStatement()
@@ -106,6 +135,11 @@ Variable *Parser::parseVariable()
     //TODO
 }
 
+LogVar* Parser::parseCollection()
+{
+    //TODO
+}
+
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
 	VariableDeclaration* node = new VariableDeclaration();
@@ -121,17 +155,13 @@ WhileStatement *Parser::parseWhileStatement()
 
 	accept({LexType::while_kw});
 
-	accept({LexType::rbracket});
+	accept({LexType::lbracket});
 
 	node->setCondition(parseCondition());
 
-	accept({LexType::lbracket});
+	accept({LexType::rbracket});
 
-	accept({LexType::rcurlbracket});
-
-	node->setBlock(parseBlock());
-
-	accept({LexType::lcurlbracket});
+	node->setStatement(parseStatement());
 
 	return node;
 }
