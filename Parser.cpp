@@ -16,7 +16,7 @@ Parser::~Parser()
 
 ASTNode *Parser::parse()
 {
-    auto* program = new StatementBlock();
+    auto* program = new Statement();
 	getNextToken();
 
 }
@@ -26,7 +26,7 @@ void Parser::getNextToken()
     bufferedToken = lexer->nextToken();
 }
 
-bool Parser::accept(const std::initializer_list<LexType> &acceptable)
+bool Parser::accept(const std::initializer_list<LexType>& acceptable)
 {
     for(auto it: acceptable)
     {
@@ -101,7 +101,45 @@ FunctionDefinition* Parser::parseFunctionDefinition()
 
 StatementBlock *Parser::parseBlock()
 {
-    //TODO
+    StatementBlock* node = new StatementBlock();
+
+    accept({LexType::lcurlbracket});
+
+    while(true)
+    {
+        if(peek({LexType::while_kw}))
+        {
+            node->addStatement(parseWhileStatement());
+            continue;
+        }
+        else if(peek({LexType::for_kw}))
+        {
+            node->addStatement(parseForStatement());
+            continue;
+        }
+        else if(peek({LexType::id}))
+        {
+            node->addStatement(parseAssignmentOrFunctionCall());
+            continue;
+        }
+        else if(peek({LexType::if_kw}))
+        {
+            node->addStatement(parseIfStatement());
+            continue;
+        }
+        else if(peek({LexType::int_kw, LexType::string_kw, LexType::log_kw}))
+        {
+            node->addStatement(parseVariableDeclaration());
+            continue;
+        }
+        else if(peek({LexType::rcurlbracket}))
+        {
+            accept({LexType::rcurlbracket});
+            break;
+        }
+    }
+
+    return node;
 }
 
 Statement *Parser::parseStatement()
@@ -175,6 +213,11 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
     }
 
     return node;
+}
+
+Statement* Parser::parseAssignmentOrFunctionCall()
+{
+    //TODO
 }
 
 IfStatement *Parser::parseIfStatement()

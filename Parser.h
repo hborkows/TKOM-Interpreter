@@ -61,6 +61,8 @@ private:
 
     FunctionCall* parseFunCall(const std::string& id);
 
+    Statement* parseAssignmentOrFunctionCall();
+
     IfStatement* parseIfStatement();
 
     ReturnStatement* parseReturnStatement();
