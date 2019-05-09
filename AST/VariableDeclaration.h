@@ -18,10 +18,27 @@ public:
 
     void setValue(Assignable* value) {this->value = value;}
 
+    void setVarType(const LexType& type)
+    {
+        if(type == LexType::int_kw)
+        {
+            varType = Type::int_var;
+        }
+        else if(type == LexType::string_kw)
+        {
+            varType = Type::string_var;
+        }
+        else if(type == LexType::log_kw)
+        {
+            varType = Type::log_var;
+        }
+    }
+
     Type getType() const override {return ASTNode::Type::var_declaration;}
 protected:
     Assignable* value;
     std::string name;
+    Type varType;
 };
 
 

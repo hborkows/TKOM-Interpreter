@@ -25,7 +25,10 @@ public:
         block,
         condition,
         expression,
-        statement
+        statement,
+        int_var,
+        string_var,
+        log_var
     };
 
     virtual Type getType() const = 0;

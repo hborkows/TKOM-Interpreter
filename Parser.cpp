@@ -173,7 +173,7 @@ ForStatement *Parser::parseForStatement()
 
 	accept({LexType::for_kw});
 
-	node->setVariable(parseVariable());
+	node->setVariable(parseVariable(bufferedToken.text));
 
 	accept({LexType::in_kw});
 
@@ -313,9 +313,32 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 {
 	VariableDeclaration* node = new VariableDeclaration();
 
-	accept({LexType::int_kw, LexType::string_kw, LexType::log_kw});
+	Token temp;
 
-	//TODO
+	if(peek({LexType::int_kw, LexType::string_kw, LexType::log_kw}))
+    {
+	    temp = bufferedToken;
+        accept({LexType::int_kw, LexType::string_kw, LexType::log_kw});
+    }
+
+	node->setVarType(temp.type);
+
+	if(peek({LexType::id}))
+    {
+	    node->setName(bufferedToken.text);
+	    accept({LexType::id});
+    }
+
+	if(peek({LexType::assign_op}))
+    {
+	    accept({LexType::assign_op});
+
+	    node->setValue(parseAssignable());
+    }
+
+	accept({LexType::semicolon});
+
+	return node;
 }
 
 WhileStatement *Parser::parseWhileStatement()
