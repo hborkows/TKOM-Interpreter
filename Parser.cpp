@@ -213,6 +213,10 @@ Statement *Parser::parseStatement()
         {
             node = parseVariableDeclaration();
         }
+        else if(peek({LexType::return_kw}))
+        {
+            node = parseReturnStatement();
+        }
         else
         {
             node = nullptr;
@@ -437,6 +441,8 @@ ForStatement *Parser::parseForStatement()
 	node->setCollection(parseCollection());
 
 	node->setBlock(parseStatement());
+
+	return node;
 }
 
 FunctionCall *Parser::parseFunCall(const std::string& id)
