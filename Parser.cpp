@@ -188,6 +188,12 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
 
     node->setName(id);
 
+    if(!peek({LexType::lbracket})) //not a function call
+    {
+        delete node;
+        return nullptr;
+    }
+
     accept({LexType::lbracket});
 
     if(peek({LexType::rbracket}))
@@ -212,12 +218,40 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
         }
     }
 
+    accept({LexType::semicolon});
+
     return node;
 }
 
 Statement* Parser::parseAssignmentOrFunctionCall()
 {
-    //TODO
+    Statement* node;
+    Token temp;
+
+    if(peek({LexType::id}))
+    {
+        temp = bufferedToken;
+        accept({LexType::id});
+    }
+
+    node = parseFunCall(temp.text);
+
+    if(node == nullptr)//we have to parse assignment, not a function call
+    {
+        Assignment* assignmentNode = new Assignment();
+
+        assignmentNode->setVariable(parseVariable(temp.text));
+
+        accept({LexType::assign_op});
+
+        assignmentNode->setAssignable(parseAssignable());
+
+        accept({LexType::semicolon});
+
+        node = assignmentNode;
+    }
+
+    return node;
 }
 
 IfStatement *Parser::parseIfStatement()
@@ -259,9 +293,15 @@ ReturnStatement *Parser::parseReturnStatement()
 	return node;
 }
 
-Variable *Parser::parseVariable()
+Variable *Parser::parseVariable(const std::string& name)
 {
-    //TODO
+    Variable* node = new Variable();
+
+    node->setName(name);
+
+    accept({LexType::id});
+
+    return node;
 }
 
 LogVar* Parser::parseCollection()

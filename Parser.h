@@ -67,7 +67,7 @@ private:
 
     ReturnStatement* parseReturnStatement();
 
-    Variable* parseVariable();
+    Variable* parseVariable(const std::string& name);
 
     LogVar* parseCollection();
 
