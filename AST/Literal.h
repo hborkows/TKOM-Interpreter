@@ -16,10 +16,23 @@ public:
 
     void setIntValue(const int& value) {intValue = value;}
 
+    void setLiteralType(const LexType& type)
+    {
+        if(type == LexType::text_const)
+        {
+            literalType = Type::string_lit;
+        }
+        else if(type == LexType::int_const)
+        {
+            literalType = Type::int_lit;
+        }
+    }
+
     Type getType()const override {return Type::literal;}
 protected:
     std::string textValue;
     int intValue;
+    Type literalType;
 };
 
 

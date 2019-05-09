@@ -26,6 +26,8 @@ public:
         condition,
         expression,
         statement,
+        int_lit,
+        string_lit,
         int_var,
         string_var,
         log_var,

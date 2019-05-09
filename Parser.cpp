@@ -233,11 +233,35 @@ ASTNode* Parser::parsePrimaryExpression()
         Expression* node = parseExpression();
 
         accept({LexType::rbracket});
+
+        return node;
     }
     else
     {
+        Literal* node = parseLiteral();
 
+        return node;
     }
+}
+
+Literal* Parser::parseLiteral()
+{
+    Literal* node = new Literal();
+
+    if(peek({LexType::text_const}))
+    {
+        node->setLiteralType(bufferedToken.type);
+        node->setTextValue(bufferedToken.text);
+        accept({LexType::text_const});
+    }
+    else if(peek({LexType::int_const}))
+    {
+        node->setLiteralType(bufferedToken.type);
+        node->setIntValue(bufferedToken.value);
+        accept({LexType::int_const});
+    }
+
+    return node;
 }
 
 ForStatement *Parser::parseForStatement()

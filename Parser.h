@@ -20,6 +20,7 @@
 #include "AST/WhileStatement.h"
 #include "Tracer.h"
 #include "AST/FunctionDefinition.h"
+#include "AST/Literal.h"
 
 class Parser
 {
@@ -59,9 +60,9 @@ private:
 
     Expression* parseMultiplicativeExpression();
 
-    ASTNode* parsePrimaryExpression()
+    ASTNode* parsePrimaryExpression();
 
-
+    Literal* parseLiteral();
 
     ForStatement* parseForStatement();
 
