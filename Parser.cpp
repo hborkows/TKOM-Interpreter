@@ -149,7 +149,27 @@ Statement *Parser::parseStatement()
 
 Assignable *Parser::parseAssignable()
 {
-    //TODO
+    Assignable* node;
+    Token temp;
+
+    if(peek({LexType::id}))
+    {
+        temp = bufferedToken;
+        accept({LexType::id});
+
+        node = parseFunCall(temp.text);
+
+        if(node == nullptr)
+        {
+            node = parseExpression();
+        }
+    }
+    else
+    {
+        node = parseExpression();
+    }
+
+    return node;
 }
 
 Assignment *Parser::parseAssignment()
