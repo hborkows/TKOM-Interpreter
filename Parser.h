@@ -52,8 +52,6 @@ private:
 
     Assignable* parseAssignable();
 
-    Assignment* parseAssignment();
-
     Condition* parseCondition();
 
     Expression* parseExpression();

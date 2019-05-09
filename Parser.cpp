@@ -144,7 +144,41 @@ StatementBlock *Parser::parseBlock()
 
 Statement *Parser::parseStatement()
 {
-    //TODO
+    Statement* node;
+
+    if(peek({LexType::rcurlbracket}))
+    {
+        node = parseBlock();
+    }
+    else
+    {
+        if(peek({LexType::while_kw}))
+        {
+            node = parseWhileStatement();
+        }
+        else if(peek({LexType::for_kw}))
+        {
+            node = parseForStatement();
+        }
+        else if(peek({LexType::id}))
+        {
+            node = parseAssignmentOrFunctionCall();
+        }
+        else if(peek({LexType::if_kw}))
+        {
+            node = parseIfStatement();
+        }
+        else if(peek({LexType::int_kw, LexType::string_kw, LexType::log_kw}))
+        {
+            node = parseVariableDeclaration();
+        }
+        else
+        {
+            node = nullptr;
+        }
+    }
+
+    return node;
 }
 
 Assignable *Parser::parseAssignable()
@@ -170,11 +204,6 @@ Assignable *Parser::parseAssignable()
     }
 
     return node;
-}
-
-Assignment *Parser::parseAssignment()
-{
-    //TODO
 }
 
 Condition *Parser::parseCondition()
