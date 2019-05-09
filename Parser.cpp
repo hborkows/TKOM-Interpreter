@@ -184,7 +184,60 @@ Condition *Parser::parseCondition()
 
 Expression *Parser::parseExpression()
 {
-    //TODO
+    Expression* node = new Expression();
+
+    node->addOperand(parseMultiplicativeExpression());
+
+    while(peek({LexType::plus_op, LexType::minus_op}))
+    {
+        node->addOperator(bufferedToken.type);
+
+        accept({LexType::plus_op, LexType::minus_op});
+
+        node->addOperand(parseMultiplicativeExpression());
+    }
+
+    return node;
+}
+
+Expression* Parser::parseMultiplicativeExpression()
+{
+    Expression* node = new Expression();
+
+    node->addOperand(parsePrimaryExpression());
+
+    while(peek({LexType::div_op, LexType::mul_op}))
+    {
+        node->addOperator(bufferedToken.type);
+
+        accept({LexType::div_op, LexType::mul_op});
+
+        node->addOperand(parsePrimaryExpression());
+    }
+
+    return node;
+}
+
+ASTNode* Parser::parsePrimaryExpression()
+{
+    if(peek({LexType::id}))
+    {
+        Variable* node = parseVariable(bufferedToken.text);
+
+        return node;
+    }
+    else if(peek({LexType::lbracket}))
+    {
+        accept({LexType::lbracket});
+
+        Expression* node = parseExpression();
+
+        accept({LexType::rbracket});
+    }
+    else
+    {
+
+    }
 }
 
 ForStatement *Parser::parseForStatement()

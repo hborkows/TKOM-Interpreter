@@ -57,6 +57,12 @@ private:
 
     Expression* parseExpression();
 
+    Expression* parseMultiplicativeExpression();
+
+    ASTNode* parsePrimaryExpression()
+
+
+
     ForStatement* parseForStatement();
 
     FunctionCall* parseFunCall(const std::string& id);

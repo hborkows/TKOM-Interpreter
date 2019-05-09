@@ -10,7 +10,7 @@
 #include "Assignable.h"
 #include "Lvalue.h"
 
-class Variable: public Assignable, public Lvalue
+class Variable: public Lvalue
 {
 public:
     Type getType() const override {return Type::variable;}

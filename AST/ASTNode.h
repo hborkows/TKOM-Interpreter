@@ -28,7 +28,8 @@ public:
         statement,
         int_var,
         string_var,
-        log_var
+        log_var,
+        literal
     };
 
     virtual Type getType() const = 0;
