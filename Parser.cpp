@@ -12,13 +12,44 @@ Parser::Parser(Lexer *lexer): bufferedToken(), tracer()
 Parser::~Parser()
 {
     delete lexer;
+    delete tracer;
 }
 
-ASTNode *Parser::parse()
+Program *Parser::parse()
 {
-    auto* program = new Statement();
+    Program* program = new Program();
 	getNextToken();
+	bool definitionBlockOpened = false;
 
+	if(peek({LexType::start_define}))
+    {
+	    accept({LexType::start_define});
+	    definitionBlockOpened = true;
+
+        while (!peek({LexType::end_of_code, LexType::end_define}))
+        {
+            program->addFunction(parseFunctionDefinition());
+        }
+    }
+
+	if(peek({LexType::end_of_code}))
+    {
+	    accept({LexType::end_of_code});
+	    return program;
+    }
+	else if(definitionBlockOpened)
+    {
+        accept({LexType::end_define});
+    }
+
+	while(!peek({LexType::end_of_code}))
+    {
+	    program->addStatement(parseStatement());
+    }
+
+	accept({LexType::end_of_code});
+
+    return program;
 }
 
 void Parser::getNextToken()
@@ -54,6 +85,16 @@ bool Parser::peek(const std::initializer_list<LexType>& acceptable)
 FunctionDefinition* Parser::parseFunctionDefinition()
 {
     FunctionDefinition* node = new FunctionDefinition();
+
+    if(peek({LexType::int_kw, LexType::string_kw, LexType::void_kw}))
+    {
+        node->setReturntype(bufferedToken.type);
+        accept({LexType::int_kw, LexType::string_kw, LexType::void_kw});
+    }
+    else
+    {
+        return nullptr;
+    }
 
     if(peek({LexType::id}))
     {

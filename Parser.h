@@ -21,6 +21,7 @@
 #include "Tracer.h"
 #include "AST/FunctionDefinition.h"
 #include "AST/Literal.h"
+#include "AST/Program.h"
 
 class Parser
 {
@@ -29,7 +30,7 @@ public:
 
     ~Parser();
 
-    ASTNode* parse();
+    Program* parse();
 
 private:
     Lexer* lexer;

@@ -31,7 +31,8 @@ Lexer::Lexer(Source *source) : source(source)
             Keyword("for", for_kw), Keyword("while", while_kw), Keyword("in", in_kw),
             Keyword("and", and_op), Keyword("or", or_op),
             Keyword("if", if_kw), Keyword("else", else_kw), Keyword("elif", elif_kw),
-            Keyword("return", return_kw)
+            Keyword("return", return_kw), Keyword("void", void_kw),
+            Keyword("#def", start_define), Keyword("#end_def", end_define)
     };
 }
 

@@ -26,11 +26,28 @@ public:
 
     void setStatement(Statement* statement) {this->statement = statement;}
 
+    void setReturntype(const LexType& type)
+    {
+        if(type == LexType::string_kw)
+        {
+            returnType = Type::string_var;
+        }
+        else if(type == LexType::int_kw)
+        {
+            returnType = Type::int_var;
+        }
+        else if(type == LexType::void_kw)
+        {
+            returnType = Type::void_var;
+        }
+    }
+
     Type getType()const override {return Type::function_definition;}
 protected:
     std::string name;
     std::vector<std::string> parameters;
     Statement* statement;
+    Type returnType;
 };
 
 

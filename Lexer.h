@@ -18,8 +18,9 @@ enum LexType
     if_kw, else_kw, elif_kw,
     int_const, text_const,
     id,
-    int_kw, log_kw, string_kw,
+    int_kw, log_kw, string_kw, void_kw,
     return_kw,
+    start_define, end_define,
     semicolon, comma, end_of_code,
     unknown
 };
