@@ -17,7 +17,7 @@ Parser::~Parser()
 
 Program *Parser::parse()
 {
-    Program* program = new Program();
+    auto program = new Program();
 	getNextToken();
 	bool definitionBlockOpened = false;
 
@@ -84,7 +84,7 @@ bool Parser::peek(const std::initializer_list<LexType>& acceptable)
 
 FunctionDefinition* Parser::parseFunctionDefinition()
 {
-    FunctionDefinition* node = new FunctionDefinition();
+    auto node = new FunctionDefinition();
 
     if(peek({LexType::int_kw, LexType::string_kw, LexType::void_kw}))
     {
@@ -142,7 +142,7 @@ FunctionDefinition* Parser::parseFunctionDefinition()
 
 StatementBlock *Parser::parseBlock()
 {
-    StatementBlock* node = new StatementBlock();
+    auto node = new StatementBlock();
 
     accept({LexType::lcurlbracket});
 
@@ -249,7 +249,7 @@ Assignable *Parser::parseAssignable()
 
 Condition *Parser::parseCondition()
 {
-    Condition* node = new Condition();
+    auto node = new Condition();
 
     node->addOperand(parseAndCondition());
 
@@ -265,7 +265,7 @@ Condition *Parser::parseCondition()
 
 Condition* Parser::parseAndCondition()
 {
-    Condition* node = new Condition();
+    auto node = new Condition();
 
     node->addOperand(parseEqualCondition());
 
@@ -281,7 +281,7 @@ Condition* Parser::parseAndCondition()
 
 Condition* Parser::parseEqualCondition()
 {
-    Condition* node = new Condition();
+    auto node = new Condition();
 
     node->addOperand(parseRelationCondition());
 
@@ -297,7 +297,7 @@ Condition* Parser::parseEqualCondition()
 
 Condition* Parser::parseRelationCondition()
 {
-    Condition* node = new Condition();
+    auto node = new Condition();
 
     node->addOperand(parsePrimaryCondition());
 
@@ -313,7 +313,7 @@ Condition* Parser::parseRelationCondition()
 
 ASTNode* Parser::parsePrimaryCondition()
 {
-    Condition* node = new Condition();
+    auto node = new Condition();
 
     if(peek({LexType::not_op}))
     {
@@ -344,7 +344,7 @@ ASTNode* Parser::parsePrimaryCondition()
 
 Expression *Parser::parseExpression()
 {
-    Expression* node = new Expression();
+    auto node = new Expression();
 
     node->addOperand(parseMultiplicativeExpression());
 
@@ -362,7 +362,7 @@ Expression *Parser::parseExpression()
 
 Expression* Parser::parseMultiplicativeExpression()
 {
-    Expression* node = new Expression();
+    auto node = new Expression();
 
     node->addOperand(parsePrimaryExpression());
 
@@ -406,7 +406,7 @@ ASTNode* Parser::parsePrimaryExpression()
 
 Literal* Parser::parseLiteral()
 {
-    Literal* node = new Literal();
+    auto node = new Literal();
 
     if(peek({LexType::text_const}))
     {
@@ -426,7 +426,7 @@ Literal* Parser::parseLiteral()
 
 ForStatement *Parser::parseForStatement()
 {
-    ForStatement* node = new ForStatement();
+    auto node = new ForStatement();
 
 	accept({LexType::for_kw});
 
@@ -441,7 +441,7 @@ ForStatement *Parser::parseForStatement()
 
 FunctionCall *Parser::parseFunCall(const std::string& id)
 {
-    FunctionCall* node = new FunctionCall();
+    auto node = new FunctionCall();
 
     node->setName(id);
 
@@ -495,7 +495,7 @@ Statement* Parser::parseAssignmentOrFunctionCall()
 
     if(node == nullptr)//we have to parse assignment, not a function call
     {
-        Assignment* assignmentNode = new Assignment();
+        auto assignmentNode = new Assignment();
 
         assignmentNode->setVariable(parseVariable(temp.text));
 
@@ -513,7 +513,7 @@ Statement* Parser::parseAssignmentOrFunctionCall()
 
 IfStatement *Parser::parseIfStatement()
 {
-    IfStatement* node = new IfStatement();
+    auto node = new IfStatement();
 
     accept({LexType::if_kw});
 
@@ -539,7 +539,7 @@ IfStatement *Parser::parseIfStatement()
 
 ReturnStatement *Parser::parseReturnStatement()
 {
-    ReturnStatement* node = new ReturnStatement();
+    auto node = new ReturnStatement();
 
 	accept({LexType::return_kw});
 
@@ -552,7 +552,7 @@ ReturnStatement *Parser::parseReturnStatement()
 
 Variable *Parser::parseVariable(const std::string& name)
 {
-    Variable* node = new Variable();
+    auto node = new Variable();
 
     node->setName(name);
 
@@ -568,7 +568,7 @@ LogVar* Parser::parseCollection()
 
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
-	VariableDeclaration* node = new VariableDeclaration();
+	auto node = new VariableDeclaration();
 
 	Token temp;
 
@@ -600,7 +600,7 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 
 WhileStatement *Parser::parseWhileStatement()
 {
-    WhileStatement* node = new WhileStatement();
+    auto node = new WhileStatement();
 
 	accept({LexType::while_kw});
 
