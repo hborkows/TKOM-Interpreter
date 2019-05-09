@@ -7,4 +7,4 @@ add_executable(TKOM_Interpreter main.cpp Source.cpp Source.h Lexer.cpp Lexer.h A
         AST/Assignable.h AST/Variable.cpp AST/Variable.h AST/VariableDeclaration.h
         AST/FunctionCall.h AST/Assignment.h AST/ReturnStatement.h
         AST/WhileStatement.h AST/ForStatement.h AST/IfStatement.h
-        Tracer.cpp Tracer.h Parser.cpp Parser.h AST/Expression.h AST/StatementBlock.h AST/Condition.h AST/Statement.h AST/LogVar.h Structures/LogEntry.cpp Structures/LogEntry.h AST/FunctionDefinition.h AST/Literal.h)
+        Tracer.cpp Tracer.h Parser.cpp Parser.h AST/Expression.h AST/StatementBlock.h AST/Condition.h AST/Statement.h AST/LogVar.h Structures/LogEntry.cpp Structures/LogEntry.h AST/FunctionDefinition.h AST/Literal.h AST/Program.h)

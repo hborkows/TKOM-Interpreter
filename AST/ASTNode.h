@@ -31,7 +31,8 @@ public:
         int_var,
         string_var,
         log_var,
-        literal
+        literal,
+        program
     };
 
     virtual Type getType() const = 0;
