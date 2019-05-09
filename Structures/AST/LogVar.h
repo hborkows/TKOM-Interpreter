@@ -7,7 +7,7 @@
 
 
 #include "Variable.h"
-#include "../Structures/LogEntry.h"
+#include "../LogEntry.h"
 #include <vector>
 
 class LogVar: public Variable

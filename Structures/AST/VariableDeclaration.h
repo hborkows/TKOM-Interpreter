@@ -6,10 +6,9 @@
 #define TKOM_INTERPRETER_VARIABLEDECLARATION_H
 
 #include <string>
-#include "Lvalue.h"
 #include "Assignable.h"
 
-class VariableDeclaration: public Lvalue
+class VariableDeclaration: public Statement
 {
 public:
     ~VariableDeclaration() {delete value;}

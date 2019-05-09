@@ -3,8 +3,8 @@ project(TKOM_Interpreter)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(TKOM_Interpreter main.cpp Source.cpp Source.h Lexer.cpp Lexer.h AST/ASTNode.h AST/Lvalue.cpp AST/Lvalue.h
-        AST/Assignable.h AST/Variable.cpp AST/Variable.h AST/VariableDeclaration.h
-        AST/FunctionCall.h AST/Assignment.h AST/ReturnStatement.h
-        AST/WhileStatement.h AST/ForStatement.h AST/IfStatement.h
-        Tracer.cpp Tracer.h Parser.cpp Parser.h AST/Expression.h AST/StatementBlock.h AST/Condition.h AST/Statement.h AST/LogVar.h Structures/LogEntry.cpp Structures/LogEntry.h AST/FunctionDefinition.h AST/Literal.h AST/Program.h)
+add_executable(TKOM_Interpreter main.cpp Modules/Source.cpp Modules/Source.h Modules/Lexer.cpp Modules/Lexer.h Structures/AST/ASTNode.h
+        Structures/AST/Assignable.h Structures/AST/Variable.h Structures/AST/VariableDeclaration.h
+        Structures/AST/FunctionCall.h Structures/AST/Assignment.h Structures/AST/ReturnStatement.h
+        Structures/AST/WhileStatement.h Structures/AST/ForStatement.h Structures/AST/IfStatement.h
+        Modules/Tracer.cpp Modules/Tracer.h Modules/Parser.cpp Modules/Parser.h Structures/AST/Expression.h Structures/AST/StatementBlock.h Structures/AST/Condition.h Structures/AST/Statement.h Structures/AST/LogVar.h Structures/LogEntry.cpp Structures/LogEntry.h Structures/AST/FunctionDefinition.h Structures/AST/Literal.h Structures/AST/Program.h)

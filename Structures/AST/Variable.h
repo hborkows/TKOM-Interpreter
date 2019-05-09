@@ -8,9 +8,9 @@
 
 #include <string>
 #include "Assignable.h"
-#include "Lvalue.h"
+#include "Statement.h"
 
-class Variable: public Lvalue
+class Variable: public Statement
 {
 public:
     Type getType() const override {return Type::variable;}
