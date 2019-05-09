@@ -33,7 +33,7 @@ public:
         log_var,
         literal,
         program,
-        void_var
+        void_var,
     };
 
     virtual Type getType() const = 0;

@@ -249,6 +249,16 @@ void Lexer::checkIfTwoCharOperator(Token &token)
             else
                 token.initToken(assign_op, tokenStart);
             break;
+        case '!':
+            source->take();
+            c = source->peek();
+            if(c == '=')
+            {
+                token.initToken(not_equal_op, tokenStart);
+                source->take();
+            }
+            else
+                token.initToken(not_op, tokenStart);
         default:
             break;
     }
@@ -288,10 +298,6 @@ void Lexer::checkIfOneCharOperator(Token &token)
             break;
         case '}':
             token.initToken(rcurlbracket, tokenStart);
-            source->take();
-            break;
-        case '!':
-            token.initToken(not_op, tokenStart);
             source->take();
             break;
         case ';':

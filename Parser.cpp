@@ -249,7 +249,97 @@ Assignable *Parser::parseAssignable()
 
 Condition *Parser::parseCondition()
 {
-    //TODO
+    Condition* node = new Condition();
+
+    node->addOperand(parseAndCondition());
+
+    while(peek({LexType::or_op}))
+    {
+        node->setOperation(LexType::or_op);
+        accept({LexType::or_op});
+        node->addOperand(parseAndCondition());
+    }
+
+    return node;
+}
+
+Condition* Parser::parseAndCondition()
+{
+    Condition* node = new Condition();
+
+    node->addOperand(parseEqualCondition());
+
+    while(peek({LexType::and_op}))
+    {
+        node->setOperation(LexType::and_op);
+        accept({LexType::and_op});
+        node->addOperand(parseEqualCondition());
+    }
+
+    return node;
+}
+
+Condition* Parser::parseEqualCondition()
+{
+    Condition* node = new Condition();
+
+    node->addOperand(parseRelationCondition());
+
+    while(peek({LexType::equal_op, LexType::not_equal_op}))
+    {
+        node->setOperation(bufferedToken.type);
+        accept({LexType::equal_op, LexType::not_equal_op});
+        node->addOperand(parseRelationCondition());
+    }
+
+    return node;
+}
+
+Condition* Parser::parseRelationCondition()
+{
+    Condition* node = new Condition();
+
+    node->addOperand(parsePrimaryCondition());
+
+    while(peek({LexType::ge_op, LexType::gt_op, LexType::le_op, LexType::lt_op}))
+    {
+        node->setOperation(bufferedToken.type);
+        accept({LexType::ge_op, LexType::gt_op, LexType::le_op, LexType::lt_op});
+        node->addOperand(parsePrimaryCondition());
+    }
+
+    return node;
+}
+
+ASTNode* Parser::parsePrimaryCondition()
+{
+    Condition* node = new Condition();
+
+    if(peek({LexType::not_op}))
+    {
+        node->setNegated(true);
+        accept({LexType::not_op});
+    }
+
+    if(peek({LexType::lbracket}))
+    {
+        accept({LexType::lbracket});
+        node->addOperand(parseCondition());
+        accept({LexType::rbracket});
+    }
+    else
+    {
+        if(peek({LexType::id}))
+        {
+            node->addOperand(parseVariable(bufferedToken.text));
+        }
+        else
+        {
+            node->addOperand(parseLiteral());
+        }
+    }
+
+    return node;
 }
 
 Expression *Parser::parseExpression()

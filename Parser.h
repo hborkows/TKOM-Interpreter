@@ -55,6 +55,14 @@ private:
 
     Condition* parseCondition();
 
+    Condition* parseAndCondition();
+
+    Condition* parseEqualCondition();
+
+    Condition* parseRelationCondition();
+
+    ASTNode* parsePrimaryCondition();
+
     Expression* parseExpression();
 
     Expression* parseMultiplicativeExpression();
