@@ -11,6 +11,7 @@
 #include "StatementBlock.h"
 #include "Variable.h"
 #include "LogVar.h"
+#include "VariableDeclaration.h"
 
 class ForStatement: public Statement
 {
@@ -21,7 +22,7 @@ public:
 
     void setBlock(Statement* statement) {this->statement = statement;}
 
-    void setVariable(Variable* var) {variable = var;}
+    void setVariable(VariableDeclaration* var) {variable = var;}
 
     void setCollection(LogVar* collection) {this->collection = collection;}
 
@@ -30,7 +31,7 @@ public:
 protected:
     Statement* statement;
   	LogVar* collection;
-    Variable* variable;
+    VariableDeclaration* variable;
 };
 
 

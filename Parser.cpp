@@ -434,7 +434,15 @@ ForStatement *Parser::parseForStatement()
 
 	accept({LexType::for_kw});
 
-	node->setVariable(parseVariable(bufferedToken.text));
+	auto var = new VariableDeclaration();
+
+	if(peek({LexType::id}))
+    {
+	    var->setName(bufferedToken.text);
+	    var->setVarType(LexType::log_kw);
+    }
+
+	node->setVariable(var);
 
 	accept({LexType::in_kw});
 
@@ -569,7 +577,14 @@ Variable *Parser::parseVariable(const std::string& name)
 
 LogVar* Parser::parseCollection()
 {
-    //TODO
+    auto node = new LogVar();
+
+    if(peek({LexType::id}))
+    {
+        node->setName(bufferedToken.text);
+    }
+
+    return node;
 }
 
 VariableDeclaration *Parser::parseVariableDeclaration()
