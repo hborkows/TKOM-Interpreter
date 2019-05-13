@@ -25,7 +25,6 @@ enum LexType
     unknown
 };
 
-
 struct Token
 {
     LexType type;
