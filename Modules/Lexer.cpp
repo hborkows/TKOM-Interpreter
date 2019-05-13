@@ -38,7 +38,7 @@ Lexer::Lexer(Source *source) : source(source)
 
 Lexer::~Lexer()
 {
-    delete source;
+
 }
 
 Token Lexer::nextToken()
@@ -48,18 +48,23 @@ Token Lexer::nextToken()
     skipWhitespace();
 
     //check if comment or division operator when given '\'
-    checkIfCommentOrDivision(result);
+    if(checkIfCommentOrDivision(result))
+        return result;
 
     //check if keyword or a variable name or a function name
-    checkIfKeywordOrID(result);
+    if(checkIfKeywordOrID(result))
+        return result;
 
     //check if numerical value
-    checkIfNumber(result);
+    if(checkIfNumber(result))
+        return result;
 
     //check if text constant
-    checkIfString(result);
+    if(checkIfString(result))
+        return result;
     
-    checkIfTwoCharOperator(result);
+    if(checkIfTwoCharOperator(result))
+        return result;
 
     checkIfOneCharOperator(result);
 
@@ -73,7 +78,7 @@ bool Lexer::isWhitespace(char c)
 
 bool Lexer::isAlpha(char c)
 {
-    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_';
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_' || c == '#';
 }
 
 bool Lexer::isDigit(char c)
@@ -105,6 +110,7 @@ void Lexer::skipLine()
     {
         source->take();
     }
+    source->take();
 }
 
 void Lexer::skipWhitespace()
@@ -115,25 +121,28 @@ void Lexer::skipWhitespace()
     }
 }
 
-void Lexer::checkIfCommentOrDivision(Token& token)
+bool Lexer::checkIfCommentOrDivision(Token& token)
 {
     TextPosition tokenStart = source->getPosition();
-    if (source->peek() == '\\')
+    while (source->peek() == '/')
     {
         source->take();
-        if (source->peek() == '\\')
+        if (source->peek() == '/')
         {
+            source->take();
             skipLine();
         }
         else
         {
             token.initToken(div_op, tokenStart);
+            source->take();
+            return true;
         }
-        source->take();
     }
+    return false;
 }
 
-void Lexer::checkIfKeywordOrID(Token& token)
+bool Lexer::checkIfKeywordOrID(Token& token)
 {
     char c = source->peek();
     std::string buffer = std::string();
@@ -162,10 +171,12 @@ void Lexer::checkIfKeywordOrID(Token& token)
         {
             token.initToken(id, tokenStart, buffer);
         }
+        return true;
     }
+    return false;
 }
 
-void Lexer::checkIfNumber(Token& token)
+bool Lexer::checkIfNumber(Token& token)
 {
     char c = source->peek();
     std::string buffer = std::string();
@@ -185,10 +196,12 @@ void Lexer::checkIfNumber(Token& token)
         }
 
         token.initToken(int_const, tokenStart, std::string(), std::stoi(buffer));
+        return true;
     }
+    return false;
 }
 
-void Lexer::checkIfString(Token& token)
+bool Lexer::checkIfString(Token& token)
 {
     char c = source->peek();
     std::string buffer = std::string();
@@ -204,11 +217,14 @@ void Lexer::checkIfString(Token& token)
             source->take();
             c = source->peek();
         }
+        source->take();
         token.initToken(text_const, tokenStart, buffer);
+        return true;
     }
+    return false;
 }
 
-void Lexer::checkIfTwoCharOperator(Token &token)
+bool Lexer::checkIfTwoCharOperator(Token &token)
 {
     char c = source->peek();
     std::string buffer = std::string();
@@ -260,8 +276,10 @@ void Lexer::checkIfTwoCharOperator(Token &token)
             else
                 token.initToken(not_op, tokenStart);
         default:
-            break;
+            return false;
     }
+
+    return true;
 }
 
 void Lexer::checkIfOneCharOperator(Token &token)
@@ -310,6 +328,10 @@ void Lexer::checkIfOneCharOperator(Token &token)
             break;
         case '$':
             token.initToken(end_of_code, tokenStart);
+            source->take();
+            break;
+        case '.':
+            token.initToken(access_op, tokenStart);
             source->take();
             break;
         default: //not a part of the language => not a valid token, error

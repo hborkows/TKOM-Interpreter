@@ -11,7 +11,7 @@
 
 enum LexType
 {
-    plus_op, minus_op, mul_op, div_op, assign_op,
+    plus_op, minus_op, mul_op, div_op, assign_op, access_op,
     and_op, or_op, not_op, gt_op, lt_op, ge_op, le_op, equal_op, not_equal_op,
     lbracket, rbracket, lcurlbracket, rcurlbracket,
     for_kw, while_kw, in_kw,
@@ -74,15 +74,15 @@ private:
 
     void skipWhitespace();
 
-    void checkIfCommentOrDivision(Token& token);
+    bool checkIfCommentOrDivision(Token& token);
 
-    void checkIfKeywordOrID(Token& token);
+    bool checkIfKeywordOrID(Token& token);
 
-    void checkIfNumber(Token& token);
+    bool checkIfNumber(Token& token);
 
-    void checkIfString(Token& token);
+    bool checkIfString(Token& token);
 
-    void checkIfTwoCharOperator(Token& token);
+    bool checkIfTwoCharOperator(Token& token);
 
     void checkIfOneCharOperator(Token& token);
 };

@@ -13,7 +13,8 @@ Source::Source(const std::string &fileName) : fileName(fileName), firstNotConsum
 
 Source::~Source()
 {
-    fin.close();
+    if(fin.is_open())
+        fin.close();
 }
 
 char Source::peek()
@@ -34,16 +35,19 @@ void Source::take()
 
 void Source::readCharFromFile()
 {
+    if(fin.eof())
+    {
+        firstNotConsumed = '$';
+        fin.close();
+    }
+
     fin >> std::noskipws >> firstNotConsumed;
 
     position.column++;
 
-    if (firstNotConsumed == EOF)
-        firstNotConsumed = '$';
-    else if (firstNotConsumed == '\n')
+    if (firstNotConsumed == '\n')
     {
         position.line++;
         position.column = 1;
-        readCharFromFile();
     }
 }
