@@ -51,6 +51,8 @@ Token Lexer::nextToken()
     if(checkIfCommentOrDivision(result))
         return result;
 
+    skipWhitespace();
+
     //check if keyword or a variable name or a function name
     if(checkIfKeywordOrID(result))
         return result;
