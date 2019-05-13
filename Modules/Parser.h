@@ -22,6 +22,7 @@
 #include "../Structures/AST/FunctionDefinition.h"
 #include "../Structures/AST/Literal.h"
 #include "../Structures/AST/Program.h"
+#include <iostream>
 
 class Parser
 {

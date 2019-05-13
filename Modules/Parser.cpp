@@ -68,8 +68,16 @@ bool Parser::accept(const std::initializer_list<LexType>& acceptable)
 		}
     }
 
-	//Throw error
-	return false;
+	std::cout << "Parser Error: Expected token: ";
+    for(auto item: acceptable)
+    {
+        std::cout << item << " ";
+    }
+    std::cout << "at line: " << bufferedToken.position.line << " col: " << bufferedToken.position.column << std::endl;
+
+    //todo: throw custom exception
+
+    exit(EXIT_FAILURE);
 }
 
 bool Parser::peek(const std::initializer_list<LexType>& acceptable)
@@ -582,6 +590,7 @@ LogVar* Parser::parseCollection()
     if(peek({LexType::id}))
     {
         node->setName(bufferedToken.text);
+        accept({LexType::id});
     }
 
     return node;
