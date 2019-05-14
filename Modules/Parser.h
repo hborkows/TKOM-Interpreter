@@ -77,7 +77,7 @@ private:
 
     FunctionCall* parseFunCall(const std::string& id);
 
-    Statement* parseAssignmentOrFunctionCallOrAccess();
+    Statement* parseAssignmentOrFunctionCall();
 
     IfStatement* parseIfStatement();
 

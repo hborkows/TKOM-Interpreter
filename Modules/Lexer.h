@@ -11,6 +11,7 @@
 
 enum LexType
 {
+    empty,
     plus_op, minus_op, mul_op, div_op, assign_op, access_op,
     and_op, or_op, not_op, gt_op, lt_op, ge_op, le_op, equal_op, not_equal_op,
     lbracket, rbracket, lcurlbracket, rcurlbracket,

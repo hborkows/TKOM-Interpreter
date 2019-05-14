@@ -48,6 +48,6 @@ void Source::readCharFromFile()
     if (firstNotConsumed == '\n')
     {
         position.line++;
-        position.column = 1;
+        position.column = 0;
     }
 }

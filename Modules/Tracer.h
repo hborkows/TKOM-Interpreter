@@ -7,11 +7,14 @@
 
 
 #include <glob.h>
+#include <string>
 
 class Tracer
 {
 public:
     Tracer() = default;
+
+    void print(const std::string& msg);
 
     void enterBlock();
 

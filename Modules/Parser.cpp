@@ -5,6 +5,7 @@
 #include "Parser.h"
 
 std::string lexNames[] = {
+        "empty",
         "plus_op", "minus_op", "mul_op", "div_op", "assign_op", "access_op",
         "and_op", "or_op", "not_op", "gt_op", "lt_op", "ge_op", "le_op", "equal_op", "not_equal_op",
         "lbracket", "rbracket", "lcurlbracket", "rcurlbracket",
@@ -183,7 +184,7 @@ StatementBlock *Parser::parseBlock()
         }
         else if(peek({LexType::id}))
         {
-            node->addStatement(parseAssignmentOrFunctionCallOrAccess());
+            node->addStatement(parseAssignmentOrFunctionCall());
             continue;
         }
         else if(peek({LexType::if_kw}))
@@ -226,7 +227,7 @@ Statement *Parser::parseStatement()
         }
         else if(peek({LexType::id}))
         {
-            node = parseAssignmentOrFunctionCallOrAccess();
+            node = parseAssignmentOrFunctionCall();
         }
         else if(peek({LexType::if_kw}))
         {
@@ -254,10 +255,12 @@ Assignable *Parser::parseAssignable()
     Assignable* node;
     Token temp;
 
+    std::cout << "Parsing Assignable" << std::endl;
+
     if(peek({LexType::id}))
     {
         temp = bufferedToken;
-        accept({LexType::id});
+        //accept({LexType::id});
 
         node = parseFunCall(temp.text);
 
@@ -282,6 +285,8 @@ Assignable *Parser::parseAssignable()
 Condition *Parser::parseCondition()
 {
     auto node = new Condition();
+
+    std::cout << "Parsing condition" << std::endl;
 
     node->addOperand(parseAndCondition());
 
@@ -363,7 +368,11 @@ ASTNode* Parser::parsePrimaryCondition()
     {
         if(peek({LexType::id}))
         {
-            node->addOperand(parseVariableOrAccess(bufferedToken.text));
+            Token temp = bufferedToken;
+
+            accept({LexType::id});
+
+            node->addOperand(parseVariableOrAccess(temp.text));
         }
         else
         {
@@ -377,6 +386,8 @@ ASTNode* Parser::parsePrimaryCondition()
 Expression *Parser::parseExpression()
 {
     auto node = new Expression();
+
+    std::cout << "Parsing expression" << std::endl;
 
     node->addOperand(parseMultiplicativeExpression());
 
@@ -414,7 +425,11 @@ ASTNode* Parser::parsePrimaryExpression()
 {
     if(peek({LexType::id}))
     {
-        Variable* node = parseVariableOrAccess(bufferedToken.text);
+        Token temp = bufferedToken;
+
+        accept({LexType::id});
+
+        Variable* node = parseVariableOrAccess(temp.text);
 
         return node;
     }
@@ -440,6 +455,8 @@ Literal* Parser::parseLiteral()
 {
     auto node = new Literal();
 
+    std::cout << "Parsing literal" << std::endl;
+
     if(peek({LexType::text_const}))
     {
         node->setLiteralType(bufferedToken.type);
@@ -459,6 +476,8 @@ Literal* Parser::parseLiteral()
 ForStatement *Parser::parseForStatement()
 {
     auto node = new ForStatement();
+
+    std::cout << "Parsing for" << std::endl;
 
 	accept({LexType::for_kw});
 
@@ -486,7 +505,11 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
 {
     auto node = new FunctionCall();
 
+    std::cout << "Parsing function call" << std::endl;
+
     node->setName(id);
+
+    accept({LexType::id});
 
     if(!peek({LexType::lbracket})) //not a function call
     {
@@ -521,10 +544,12 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
     return node;
 }
 
-Statement* Parser::parseAssignmentOrFunctionCallOrAccess()
+Statement* Parser::parseAssignmentOrFunctionCall()
 {
     Statement* node;
     Token temp;
+
+    std::cout << "AssignmentOrFunctionCall" << std::endl;
 
     if(peek({LexType::id}))
     {
@@ -555,23 +580,28 @@ IfStatement *Parser::parseIfStatement()
 {
     auto node = new IfStatement();
 
+    std::cout << "Parsing if" << std::endl;
+
     accept({LexType::if_kw});
 
     accept({LexType::lbracket});
 
     node->setCondition(parseCondition());
 
-    tracer->enterBlock();
+    accept({LexType::rbracket});
+
+    //tracer->enterBlock();
 
     node->setTrueStatement(parseStatement());
 
-    tracer->exitBlock();
+    //tracer->exitBlock();
 
-    if(accept({LexType::else_kw}))
+    if(peek({LexType::else_kw}))
     {
-        tracer->enterBlock();
+        accept({LexType::else_kw});
+        //tracer->enterBlock();
         node->setFalseStatement(parseStatement());
-        tracer->exitBlock();
+        //tracer->exitBlock();
     }
 
     return node;
@@ -580,6 +610,8 @@ IfStatement *Parser::parseIfStatement()
 ReturnStatement *Parser::parseReturnStatement()
 {
     auto node = new ReturnStatement();
+
+    std::cout << "Parsing return" << std::endl;
 
 	accept({LexType::return_kw});
 
@@ -594,9 +626,11 @@ Variable *Parser::parseVariableOrAccess(const std::string& name)
 {
     auto node = new Variable();
 
+    std::cout << "Parsing Variable" << std::endl;
+
     node->setName(name);
 
-    accept({LexType::id});
+    //accept({LexType::id});
 
     if(peek({LexType::access_op}))
     {
@@ -622,6 +656,8 @@ LogVar* Parser::parseCollection()
 {
     auto node = new LogVar();
 
+    std::cout << "Parsing collection" << std::endl;
+
     if(peek({LexType::id}))
     {
         node->setName(bufferedToken.text);
@@ -634,6 +670,8 @@ LogVar* Parser::parseCollection()
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
 	auto node = new VariableDeclaration();
+
+    std::cout << "Parsing Variable declaration" << std::endl;
 
 	Token temp;
 
@@ -666,6 +704,8 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 WhileStatement *Parser::parseWhileStatement()
 {
     auto node = new WhileStatement();
+
+    std::cout << "Parsing while" << std::endl;
 
 	accept({LexType::while_kw});
 
