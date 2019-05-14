@@ -210,7 +210,7 @@ Statement *Parser::parseStatement()
 {
     Statement* node;
 
-    if(peek({LexType::rcurlbracket}))
+    if(peek({LexType::lcurlbracket}))
     {
         node = parseBlock();
     }
@@ -464,11 +464,12 @@ ForStatement *Parser::parseForStatement()
 
 	auto var = new VariableDeclaration();
 
-	if(peek({LexType::id}))
-    {
-	    var->setName(bufferedToken.text);
-	    var->setVarType(LexType::log_kw);
-    }
+	Token temp = bufferedToken;
+
+	accept({LexType::id});
+
+	var->setName(bufferedToken.text);
+	var->setVarType(LexType::log_kw);
 
 	node->setVariable(var);
 
