@@ -263,7 +263,12 @@ Assignable *Parser::parseAssignable()
 
         if(node == nullptr)
         {
-            node = parseExpression();
+            if(peek({LexType::plus_op, LexType::minus_op, LexType::mul_op, LexType::div_op}))
+                node = parseExpression();
+        }
+        if(node == nullptr)
+        {
+            node = parseCondition();
         }
     }
     else
