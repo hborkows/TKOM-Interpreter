@@ -5,27 +5,24 @@
 #ifndef TKOM_INTERPRETER_TRACER_H
 #define TKOM_INTERPRETER_TRACER_H
 
-
-#include <glob.h>
 #include <string>
+#include <iostream>
 
 class Tracer
 {
 public:
     Tracer() = default;
 
-    void print(const std::string& msg);
+    void enterBlock(const std::string& msg);
 
-    void enterBlock();
-
-    void exitBlock();
+    void exitBlock(const std::string& msg = "Leaving");
 
     size_t getLevel() {return level;}
 
 private:
     size_t level;
 
-
+    void printIndent();
 };
 
 

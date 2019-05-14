@@ -4,12 +4,35 @@
 
 #include "Tracer.h"
 
-void Tracer::enterBlock()
+void Tracer::enterBlock(const std::string& msg)
 {
     level++;
+
+    printIndent();
+
+    std::cout << msg << std::endl;
 }
 
-void Tracer::exitBlock()
+void Tracer::exitBlock(const std::string& msg)
 {
+    if(level == 0)
+    {
+        std::cout << "Cant leave level 0!" << std::endl;
+        return;
+    }
+
     level--;
+
+    printIndent();
+
+    std::cout << msg <<std::endl;
+}
+
+void Tracer::printIndent()
+{
+    for(int i = level - 1; i > 0; --i)
+    {
+        std::cout << "| ";
+    }
+    std::cout << "|-";
 }

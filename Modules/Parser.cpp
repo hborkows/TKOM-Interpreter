@@ -266,13 +266,17 @@ Assignable *Parser::parseAssignable()
 
         if(node == nullptr)
         {
-            if(peek({LexType::plus_op, LexType::minus_op, LexType::mul_op, LexType::div_op}))
-                node = parseExpression();
+            if(peek({LexType::gt_op, LexType::ge_op, LexType::lt_op, LexType::le_op, LexType::equal_op, LexType::not_equal_op}))
+                node = parseCondition();
         }
         if(node == nullptr)
         {
-            node = parseCondition();
+            node = parseExpression();
         }
+    }
+    else if(peek({LexType::not_op}))
+    {
+        node = parseCondition();
     }
     else
     {
