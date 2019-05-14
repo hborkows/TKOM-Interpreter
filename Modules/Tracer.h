@@ -11,11 +11,11 @@
 class Tracer
 {
 public:
-    Tracer() = default;
+    Tracer();
 
-    void enterBlock(const std::string& msg);
+    void enter(const std::string& msg);
 
-    void exitBlock(const std::string& msg = "Leaving");
+    void leave(const std::string& msg = " ");
 
     size_t getLevel() {return level;}
 

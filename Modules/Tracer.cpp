@@ -4,7 +4,12 @@
 
 #include "Tracer.h"
 
-void Tracer::enterBlock(const std::string& msg)
+Tracer::Tracer()
+{
+    level = 0;
+}
+
+void Tracer::enter(const std::string& msg)
 {
     level++;
 
@@ -13,7 +18,7 @@ void Tracer::enterBlock(const std::string& msg)
     std::cout << msg << std::endl;
 }
 
-void Tracer::exitBlock(const std::string& msg)
+void Tracer::leave(const std::string& msg)
 {
     if(level == 0)
     {
@@ -30,9 +35,10 @@ void Tracer::exitBlock(const std::string& msg)
 
 void Tracer::printIndent()
 {
+    std::cout << "|";
     for(int i = level - 1; i > 0; --i)
     {
-        std::cout << "| ";
+        std::cout << "--";
     }
-    std::cout << "|-";
+    std::cout << "|";
 }

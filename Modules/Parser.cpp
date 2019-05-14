@@ -20,9 +20,10 @@ std::string lexNames[] = {
         "unknown"
 };
 
-Parser::Parser(Lexer *lexer): bufferedToken(), tracer()
+Parser::Parser(Lexer *lexer): bufferedToken()
 {
     this->lexer = lexer;
+    tracer = new Tracer();
 }
 
 Parser::~Parser()
@@ -78,16 +79,22 @@ bool Parser::accept(const std::initializer_list<LexType>& acceptable)
     {
         if(it == bufferedToken.type)
 		{
-            std::cout << "Got token: " << lexNames[bufferedToken.type] << std::endl;
+            //std::cout << "Got token: " << lexNames[bufferedToken.type] << std::endl;
 			getNextToken();
 			return true;
 		}
     }
 
+    bool firstPass = true;
 	std::cout << "Parser Error: Expected token: ";
     for(auto item: acceptable)
     {
         std::cout << lexNames[item] << " ";
+
+        if(!firstPass)
+            std::cout << "or ";
+
+        firstPass = false;
     }
     std::cout << "at line: " << bufferedToken.position.line << " col: " << bufferedToken.position.column << std::endl;
 
@@ -109,6 +116,8 @@ bool Parser::peek(const std::initializer_list<LexType>& acceptable)
 FunctionDefinition* Parser::parseFunctionDefinition()
 {
     auto node = new FunctionDefinition();
+
+    tracer->enter("Parsing Function Definition");
 
     if(peek({LexType::int_kw, LexType::string_kw, LexType::void_kw}))
     {
@@ -161,12 +170,16 @@ FunctionDefinition* Parser::parseFunctionDefinition()
 
     node->setStatement(parseStatement());
 
+    tracer->leave();
+
     return node;
 }
 
 StatementBlock *Parser::parseBlock()
 {
     auto node = new StatementBlock();
+
+    tracer->enter("Parsing Block");
 
     accept({LexType::lcurlbracket});
 
@@ -203,6 +216,8 @@ StatementBlock *Parser::parseBlock()
             break;
         }
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -243,6 +258,8 @@ Statement *Parser::parseStatement()
         }
         else
         {
+            accept({LexType::while_kw, LexType::for_kw, LexType::id, LexType::if_kw, LexType::int_kw,
+                    LexType::string_kw, LexType::log_kw, LexType::return_kw});
             node = nullptr;
         }
     }
@@ -255,12 +272,11 @@ Assignable *Parser::parseAssignable()
     Assignable* node;
     Token temp;
 
-    std::cout << "Parsing Assignable" << std::endl;
+    tracer->enter("Parsing Assignable");
 
     if(peek({LexType::id}))
     {
         temp = bufferedToken;
-        //accept({LexType::id});
 
         node = parseFunCall(temp.text);
 
@@ -283,6 +299,8 @@ Assignable *Parser::parseAssignable()
         node = parseExpression();
     }
 
+    tracer->leave();
+
     return node;
 }
 
@@ -290,7 +308,7 @@ Condition *Parser::parseCondition()
 {
     auto node = new Condition();
 
-    std::cout << "Parsing condition" << std::endl;
+    tracer->enter("Parsing condition");
 
     node->addOperand(parseAndCondition());
 
@@ -300,6 +318,8 @@ Condition *Parser::parseCondition()
         accept({LexType::or_op});
         node->addOperand(parseAndCondition());
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -391,7 +411,7 @@ Expression *Parser::parseExpression()
 {
     auto node = new Expression();
 
-    std::cout << "Parsing expression" << std::endl;
+    tracer->enter("Parsing expression");
 
     node->addOperand(parseMultiplicativeExpression());
 
@@ -403,6 +423,8 @@ Expression *Parser::parseExpression()
 
         node->addOperand(parseMultiplicativeExpression());
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -459,7 +481,7 @@ Literal* Parser::parseLiteral()
 {
     auto node = new Literal();
 
-    std::cout << "Parsing literal" << std::endl;
+    tracer->enter("Parsing literal");
 
     if(peek({LexType::text_const}))
     {
@@ -474,6 +496,8 @@ Literal* Parser::parseLiteral()
         accept({LexType::int_const});
     }
 
+    tracer->leave();
+
     return node;
 }
 
@@ -481,7 +505,7 @@ ForStatement *Parser::parseForStatement()
 {
     auto node = new ForStatement();
 
-    std::cout << "Parsing for" << std::endl;
+    tracer->enter("Parsing for each loop");
 
 	accept({LexType::for_kw});
 
@@ -502,6 +526,8 @@ ForStatement *Parser::parseForStatement()
 
 	node->setBlock(parseStatement());
 
+	tracer->leave();
+
 	return node;
 }
 
@@ -509,7 +535,7 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
 {
     auto node = new FunctionCall();
 
-    std::cout << "Parsing function call" << std::endl;
+    tracer->enter("Parsing function call");
 
     node->setName(id);
 
@@ -518,6 +544,9 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
     if(!peek({LexType::lbracket})) //not a function call
     {
         delete node;
+
+        tracer->leave("Not a function call");
+
         return nullptr;
     }
 
@@ -526,6 +555,9 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
     if(peek({LexType::rbracket}))
     {
         accept({LexType::rbracket});
+
+        tracer->leave();
+
         return node;
     }
 
@@ -545,6 +577,8 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
         }
     }
 
+    tracer->leave();
+
     return node;
 }
 
@@ -553,7 +587,7 @@ Statement* Parser::parseAssignmentOrFunctionCall()
     Statement* node;
     Token temp;
 
-    std::cout << "AssignmentOrFunctionCall" << std::endl;
+    tracer->enter("Parsing an assignment or a function call");
 
     if(peek({LexType::id}))
     {
@@ -577,6 +611,8 @@ Statement* Parser::parseAssignmentOrFunctionCall()
 
     accept({LexType::semicolon});
 
+    tracer->leave();
+
     return node;
 }
 
@@ -584,7 +620,7 @@ IfStatement *Parser::parseIfStatement()
 {
     auto node = new IfStatement();
 
-    std::cout << "Parsing if" << std::endl;
+    tracer->enter("Parsing if statement");
 
     accept({LexType::if_kw});
 
@@ -594,19 +630,15 @@ IfStatement *Parser::parseIfStatement()
 
     accept({LexType::rbracket});
 
-    //tracer->enterBlock();
-
     node->setTrueStatement(parseStatement());
-
-    //tracer->exitBlock();
 
     if(peek({LexType::else_kw}))
     {
         accept({LexType::else_kw});
-        //tracer->enterBlock();
         node->setFalseStatement(parseStatement());
-        //tracer->exitBlock();
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -615,13 +647,15 @@ ReturnStatement *Parser::parseReturnStatement()
 {
     auto node = new ReturnStatement();
 
-    std::cout << "Parsing return" << std::endl;
+    tracer->enter("Parsing return statement");
 
 	accept({LexType::return_kw});
 
     node->setAssignableNode(parseAssignable());
 
 	accept({LexType::semicolon});
+
+	tracer->leave();
 
 	return node;
 }
@@ -630,11 +664,9 @@ Variable *Parser::parseVariableOrAccess(const std::string& name)
 {
     auto node = new Variable();
 
-    std::cout << "Parsing Variable" << std::endl;
+    tracer->enter("Parsing variable");
 
     node->setName(name);
-
-    //accept({LexType::id});
 
     if(peek({LexType::access_op}))
     {
@@ -650,8 +682,12 @@ Variable *Parser::parseVariableOrAccess(const std::string& name)
 
         accessNode->setFieldName(temp.text);
 
+        tracer->leave();
+
         return accessNode;
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -660,13 +696,15 @@ LogVar* Parser::parseCollection()
 {
     auto node = new LogVar();
 
-    std::cout << "Parsing collection" << std::endl;
+    tracer->enter("Parsing collection");
 
     if(peek({LexType::id}))
     {
         node->setName(bufferedToken.text);
         accept({LexType::id});
     }
+
+    tracer->leave();
 
     return node;
 }
@@ -675,7 +713,7 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 {
 	auto node = new VariableDeclaration();
 
-    std::cout << "Parsing Variable declaration" << std::endl;
+    tracer->enter("Parsing variable declaration");
 
 	Token temp;
 
@@ -702,6 +740,8 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 
 	accept({LexType::semicolon});
 
+	tracer->leave();
+
 	return node;
 }
 
@@ -709,7 +749,7 @@ WhileStatement *Parser::parseWhileStatement()
 {
     auto node = new WhileStatement();
 
-    std::cout << "Parsing while" << std::endl;
+    tracer->enter("Parsing while loop");
 
 	accept({LexType::while_kw});
 
@@ -720,6 +760,8 @@ WhileStatement *Parser::parseWhileStatement()
 	accept({LexType::rbracket});
 
 	node->setStatement(parseStatement());
+
+	tracer->leave();
 
 	return node;
 }
