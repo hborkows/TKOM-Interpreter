@@ -183,7 +183,7 @@ StatementBlock *Parser::parseBlock()
         }
         else if(peek({LexType::id}))
         {
-            node->addStatement(parseAssignmentOrFunctionCall());
+            node->addStatement(parseAssignmentOrFunctionCallOrAccess());
             continue;
         }
         else if(peek({LexType::if_kw}))
@@ -226,7 +226,7 @@ Statement *Parser::parseStatement()
         }
         else if(peek({LexType::id}))
         {
-            node = parseAssignmentOrFunctionCall();
+            node = parseAssignmentOrFunctionCallOrAccess();
         }
         else if(peek({LexType::if_kw}))
         {
@@ -363,7 +363,7 @@ ASTNode* Parser::parsePrimaryCondition()
     {
         if(peek({LexType::id}))
         {
-            node->addOperand(parseVariable(bufferedToken.text));
+            node->addOperand(parseVariableOrAccess(bufferedToken.text));
         }
         else
         {
@@ -414,7 +414,7 @@ ASTNode* Parser::parsePrimaryExpression()
 {
     if(peek({LexType::id}))
     {
-        Variable* node = parseVariable(bufferedToken.text);
+        Variable* node = parseVariableOrAccess(bufferedToken.text);
 
         return node;
     }
@@ -521,7 +521,7 @@ FunctionCall *Parser::parseFunCall(const std::string& id)
     return node;
 }
 
-Statement* Parser::parseAssignmentOrFunctionCall()
+Statement* Parser::parseAssignmentOrFunctionCallOrAccess()
 {
     Statement* node;
     Token temp;
@@ -537,7 +537,7 @@ Statement* Parser::parseAssignmentOrFunctionCall()
     {
         auto assignmentNode = new Assignment();
 
-        assignmentNode->setVariable(parseVariable(temp.text));
+        assignmentNode->setVariable(parseVariableOrAccess(temp.text));
 
         accept({LexType::assign_op});
 
@@ -590,13 +590,30 @@ ReturnStatement *Parser::parseReturnStatement()
 	return node;
 }
 
-Variable *Parser::parseVariable(const std::string& name)
+Variable *Parser::parseVariableOrAccess(const std::string& name)
 {
     auto node = new Variable();
 
     node->setName(name);
 
     accept({LexType::id});
+
+    if(peek({LexType::access_op}))
+    {
+        auto accessNode = new FieldAccess();
+
+        accessNode->setLogVar(node);
+
+        accept({LexType::access_op});
+
+        Token temp = bufferedToken;
+
+        accept({LexType::id});
+
+        accessNode->setFieldName(temp.text);
+
+        return accessNode;
+    }
 
     return node;
 }
@@ -610,23 +627,6 @@ LogVar* Parser::parseCollection()
         node->setName(bufferedToken.text);
         accept({LexType::id});
     }
-
-    return node;
-}
-
-FieldAccess* Parser::parseAccess()
-{
-    auto node = new FieldAccess();
-
-    node->setLogVar(parseCollection());
-
-    accept({LexType::access_op});
-
-    Token temp = bufferedToken;
-
-    accept({LexType::id});
-
-    node->setFieldName(temp.text);
 
     return node;
 }

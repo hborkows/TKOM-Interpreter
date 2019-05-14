@@ -11,17 +11,17 @@
 #include <string>
 
 
-class FieldAccess: public Assignable
+class FieldAccess: public Assignable, public Variable
 {
 public:
     void setFieldName(const std::string& name) {fieldName = name;}
 
-    void setLogVar(LogVar* var) {log = var;}
+    void setLogVar(Variable* var) {log = var;}
 
     Type getType()const override {return Type::field_access;}
 protected:
     std::string fieldName;
-    LogVar* log;
+    Variable* log;
 };
 
 

@@ -77,17 +77,15 @@ private:
 
     FunctionCall* parseFunCall(const std::string& id);
 
-    Statement* parseAssignmentOrFunctionCall();
+    Statement* parseAssignmentOrFunctionCallOrAccess();
 
     IfStatement* parseIfStatement();
 
     ReturnStatement* parseReturnStatement();
 
-    Variable* parseVariable(const std::string& name);
+    Variable* parseVariableOrAccess(const std::string& name);
 
     LogVar* parseCollection();
-
-    FieldAccess* parseAccess();
 
     VariableDeclaration* parseVariableDeclaration();
 
