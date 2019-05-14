@@ -614,6 +614,23 @@ LogVar* Parser::parseCollection()
     return node;
 }
 
+FieldAccess* Parser::parseAccess()
+{
+    auto node = new FieldAccess();
+
+    node->setLogVar(parseCollection());
+
+    accept({LexType::access_op});
+
+    Token temp = bufferedToken;
+
+    accept({LexType::id});
+
+    node->setFieldName(temp.text);
+
+    return node;
+}
+
 VariableDeclaration *Parser::parseVariableDeclaration()
 {
 	auto node = new VariableDeclaration();

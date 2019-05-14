@@ -22,6 +22,7 @@
 #include "../Structures/AST/FunctionDefinition.h"
 #include "../Structures/AST/Literal.h"
 #include "../Structures/AST/Program.h"
+#include "../Structures/AST/FieldAccess.h"
 #include <iostream>
 
 class Parser
@@ -85,6 +86,8 @@ private:
     Variable* parseVariable(const std::string& name);
 
     LogVar* parseCollection();
+
+    FieldAccess* parseAccess();
 
     VariableDeclaration* parseVariableDeclaration();
 

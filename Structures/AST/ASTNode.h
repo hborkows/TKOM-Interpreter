@@ -34,6 +34,7 @@ public:
         literal,
         program,
         void_var,
+        field_access
     };
 
     virtual Type getType() const = 0;
