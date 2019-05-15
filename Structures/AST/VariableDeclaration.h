@@ -55,6 +55,15 @@ public:
         }
 
         std::cout << name << std::endl;
+
+        if(value != nullptr)
+        {
+            ParseTreePrinter::printIndent(level);
+
+            std::cout << "Value: " << std::endl;
+
+            value->print(level);
+        }
     }
 protected:
     Assignable* value;

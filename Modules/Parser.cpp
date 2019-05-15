@@ -63,7 +63,6 @@ bool Parser::accept(const std::initializer_list<LexType>& acceptable)
     {
         if(it == bufferedToken.type)
 		{
-            //std::cout << "Got token: " << lexNames[bufferedToken.type] << std::endl;
 			getNextToken();
 			return true;
 		}

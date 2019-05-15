@@ -38,7 +38,7 @@ public:
 
         if(literalType == Type::string_lit)
         {
-            std::cout << textValue << std::endl;
+            std::cout << "\"" << textValue << "\"" << std::endl;
         }
         else
         {
