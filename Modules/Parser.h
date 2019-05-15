@@ -65,11 +65,11 @@ private:
 
     ASTNode* parsePrimaryCondition();
 
-    Expression* parseExpression();
+    Expression* parseExpression(Token* token);
 
-    Expression* parseMultiplicativeExpression();
+    Expression* parseMultiplicativeExpression(Token* token);
 
-    ASTNode* parsePrimaryExpression();
+    ASTNode* parsePrimaryExpression(Token* token);
 
     Literal* parseLiteral();
 

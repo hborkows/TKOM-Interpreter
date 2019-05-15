@@ -287,7 +287,7 @@ Assignable *Parser::parseAssignable()
         }
         if(node == nullptr)
         {
-            node = parseExpression();
+            node = parseExpression(&temp);
         }
     }
     else if(peek({LexType::not_op}))
@@ -296,7 +296,7 @@ Assignable *Parser::parseAssignable()
     }
     else
     {
-        node = parseExpression();
+        node = parseExpression(nullptr);
     }
 
     tracer->leave();
@@ -407,13 +407,13 @@ ASTNode* Parser::parsePrimaryCondition()
     return node;
 }
 
-Expression *Parser::parseExpression()
+Expression*Parser::parseExpression(Token* token)
 {
     auto node = new Expression();
 
     tracer->enter("Parsing expression");
 
-    node->addOperand(parseMultiplicativeExpression());
+    node->addOperand(parseMultiplicativeExpression(token));
 
     while(peek({LexType::plus_op, LexType::minus_op}))
     {
@@ -421,7 +421,7 @@ Expression *Parser::parseExpression()
 
         accept({LexType::plus_op, LexType::minus_op});
 
-        node->addOperand(parseMultiplicativeExpression());
+        node->addOperand(parseMultiplicativeExpression(nullptr));
     }
 
     tracer->leave();
@@ -429,11 +429,11 @@ Expression *Parser::parseExpression()
     return node;
 }
 
-Expression* Parser::parseMultiplicativeExpression()
+Expression* Parser::parseMultiplicativeExpression(Token* token)
 {
     auto node = new Expression();
 
-    node->addOperand(parsePrimaryExpression());
+    node->addOperand(parsePrimaryExpression(token));
 
     while(peek({LexType::div_op, LexType::mul_op}))
     {
@@ -441,29 +441,35 @@ Expression* Parser::parseMultiplicativeExpression()
 
         accept({LexType::div_op, LexType::mul_op});
 
-        node->addOperand(parsePrimaryExpression());
+        node->addOperand(parsePrimaryExpression(nullptr));
     }
 
     return node;
 }
 
-ASTNode* Parser::parsePrimaryExpression()
+ASTNode* Parser::parsePrimaryExpression(Token* token)
 {
-    if(peek({LexType::id}))
-    {
-        Token temp = bufferedToken;
-
-        accept({LexType::id});
-
-        Variable* node = parseVariableOrAccess(temp.text);
+    if(token != nullptr && token->type == LexType::id)
+	{
+        Variable* node = parseVariableOrAccess(token->text);
 
         return node;
     }
+	else if(peek({LexType::id}))
+	{
+		Token temp = bufferedToken;
+
+		accept({LexType::id});
+
+		Variable* node = parseVariableOrAccess(temp.text);
+
+		return node;
+	}
     else if(peek({LexType::lbracket}))
     {
         accept({LexType::lbracket});
 
-        Expression* node = parseExpression();
+        Expression* node = parseExpression(nullptr);
 
         accept({LexType::rbracket});
 
