@@ -723,19 +723,16 @@ VariableDeclaration *Parser::parseVariableDeclaration()
 
 	Token temp;
 
-	if(peek({LexType::int_kw, LexType::string_kw, LexType::log_kw}))
-    {
-	    temp = bufferedToken;
-        accept({LexType::int_kw, LexType::string_kw, LexType::log_kw});
-    }
+    temp = bufferedToken;
+    accept({LexType::int_kw, LexType::string_kw, LexType::log_kw});
 
 	node->setVarType(temp.type);
 
-	if(peek({LexType::id}))
-    {
-	    node->setName(bufferedToken.text);
-	    accept({LexType::id});
-    }
+    temp = bufferedToken;
+
+    accept({LexType::id});
+
+    node->setName(temp.text);
 
 	if(peek({LexType::assign_op}))
     {
