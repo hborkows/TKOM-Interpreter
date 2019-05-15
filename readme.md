@@ -1,5 +1,5 @@
-#Budowanie
-##Terminal w systemie linux
+# Budowanie
+## Terminal w systemie linux
 W folderze z plikiem "CMakeLists.txt" :
 mkdir build
 cd build
