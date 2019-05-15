@@ -19,6 +19,13 @@ public:
     }
 
     void addEntry(const LogEntry& entry) {log.push_back(entry);}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Collection: " << name << std::endl;
+    }
 protected:
     std::vector<LogEntry> log;
 };

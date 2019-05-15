@@ -43,6 +43,24 @@ public:
     }
 
     Type getType()const override {return Type::function_definition;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Function definition: " << name << std::endl;
+
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Parameters:" ;
+
+        for(auto param: parameters)
+        {
+            std::cout << param << std::endl;
+        }
+
+        statement->print(level + 1);
+    }
 protected:
     std::string name;
     std::vector<std::string> parameters;

@@ -28,6 +28,19 @@ public:
 
     Type getType() const override {return ASTNode::Type::for_statement;}
 
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "For loop" << std::endl;
+
+        variable->print(level + 1);
+
+        collection->print(level + 1);
+
+        statement->print(level + 1);
+    }
+
 protected:
     Statement* statement;
   	LogVar* collection;

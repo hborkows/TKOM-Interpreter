@@ -34,6 +34,28 @@ public:
     }
 
     Type getType() const override {return ASTNode::Type::var_declaration;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Variable declaration: ";
+
+        if(varType == Type::log_var)
+        {
+            std::cout << "log ";
+        }
+        else if(varType == Type::int_var)
+        {
+            std::cout << "int ";
+        }
+        else
+        {
+            std::cout << "string ";
+        }
+
+        std::cout << name << std::endl;
+    }
 protected:
     Assignable* value;
     std::string name;

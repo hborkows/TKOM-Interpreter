@@ -20,6 +20,22 @@ public:
     void addArgument(Assignable* arg) {arguments.push_back(arg);}
 
     Type getType() const override {return ASTNode::Type::function_call;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Function call: " << name << std::endl;
+
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Arguments:" << std::endl;
+
+        for(auto arg: arguments)
+        {
+            arg->print(level + 1);
+        }
+    }
 protected:
     std::string name;
     std::vector<Assignable*> arguments;
