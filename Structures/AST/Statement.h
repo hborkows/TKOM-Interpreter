@@ -12,6 +12,8 @@ class Statement: public ASTNode
 {
 public:
     Type getType() const override {return Type::statement;}
+
+    void print(size_t level)const override = 0;
 protected:
 
 };

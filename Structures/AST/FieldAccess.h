@@ -19,6 +19,19 @@ public:
     void setLogVar(Variable* var) {log = var;}
 
     Type getType()const override {return Type::field_access;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Collection access" << std::endl;
+
+        log->print(level);
+
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Field name: " << fieldName << std::endl;
+    }
 protected:
     std::string fieldName;
     Variable* log;

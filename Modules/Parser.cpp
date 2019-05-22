@@ -4,22 +4,6 @@
 
 #include "Parser.h"
 
-std::string lexNames[] = {
-        "empty",
-        "plus_op", "minus_op", "mul_op", "div_op", "assign_op", "access_op",
-        "and_op", "or_op", "not_op", "gt_op", "lt_op", "ge_op", "le_op", "equal_op", "not_equal_op",
-        "lbracket", "rbracket", "lcurlbracket", "rcurlbracket",
-        "for_kw", "while_kw", "in_kw",
-        "if_kw", "else_kw", "elif_kw",
-        "int_const", "text_const",
-        "id",
-        "int_kw", "log_kw", "string_kw", "void_kw",
-        "return_kw",
-        "start_define", "end_define",
-        "semicolon", "comma", "end_of_code",
-        "unknown"
-};
-
 Parser::Parser(Lexer *lexer): bufferedToken()
 {
     this->lexer = lexer;
@@ -79,7 +63,6 @@ bool Parser::accept(const std::initializer_list<LexType>& acceptable)
     {
         if(it == bufferedToken.type)
 		{
-            //std::cout << "Got token: " << lexNames[bufferedToken.type] << std::endl;
 			getNextToken();
 			return true;
 		}

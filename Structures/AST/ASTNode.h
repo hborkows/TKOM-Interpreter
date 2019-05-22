@@ -5,7 +5,8 @@
 #ifndef TKOM_INTERPRETER_ASTNODE_H
 #define TKOM_INTERPRETER_ASTNODE_H
 
-
+#include "../../ParseTreePrinter.h"
+#include "LexNames.h"
 
 class ASTNode
 {
@@ -38,6 +39,8 @@ public:
     };
 
     virtual Type getType() const = 0;
+
+    virtual void print(size_t level) const = 0;
 
 protected:
     ASTNode* parent;

@@ -23,6 +23,7 @@
 #include "../Structures/AST/Literal.h"
 #include "../Structures/AST/Program.h"
 #include "../Structures/AST/FieldAccess.h"
+#include "../Structures/AST/LexNames.h"
 #include <iostream>
 
 class Parser

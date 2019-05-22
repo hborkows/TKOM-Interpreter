@@ -16,6 +16,17 @@ public:
     ~ReturnStatement() {delete assignableNode;}
 
     Type getType() const override {return ASTNode::Type::return_statement;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Return statement value: ";
+
+        assignableNode->print(level);
+
+        std::cout << std::endl;
+    }
 protected:
     Assignable* assignableNode;
 };

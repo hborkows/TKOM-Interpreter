@@ -17,6 +17,13 @@ public:
 
     void setName(std::string name) {this->name = name;}
 
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Variable: " << name << std::endl;
+    }
+
 protected:
     std::string name;
 };

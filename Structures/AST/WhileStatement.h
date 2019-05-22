@@ -23,6 +23,17 @@ public:
 
     Type getType() const override {return ASTNode::Type::while_statement;}
 
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "While loop: " << std::endl;
+
+        condition->print(level + 1);
+
+        statement->print(level + 1);
+    }
+
 protected:
     Statement* statement;
     Condition* condition;

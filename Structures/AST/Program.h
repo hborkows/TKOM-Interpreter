@@ -23,6 +23,31 @@ public:
 
     Type getType()const override {return Type::program;}
 
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Program: " << std::endl;
+
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Function definitions: " << std::endl;
+
+        for(auto fun: functions)
+        {
+            fun->print(level + 1);
+        }
+
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Statements: " << std::endl;
+
+        for(auto statement: statements)
+        {
+            statement->print(level + 1);
+        }
+    }
+
 protected:
     std::vector<FunctionDefinition*> functions;
     std::vector<Statement*> statements;

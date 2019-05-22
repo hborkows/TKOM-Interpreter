@@ -29,6 +29,22 @@ public:
     }
 
     Type getType()const override {return Type::literal;}
+
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Literal: ";
+
+        if(literalType == Type::string_lit)
+        {
+            std::cout << "\"" << textValue << "\"" << std::endl;
+        }
+        else
+        {
+            std::cout << intValue << std::endl;
+        }
+    }
 protected:
     std::string textValue;
     int intValue;

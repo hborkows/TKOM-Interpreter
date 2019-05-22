@@ -21,6 +21,19 @@ public:
 
     Type getType() const override {return ASTNode::Type::assignment;}
 
+    void print(size_t level)const override
+    {
+        ParseTreePrinter::printIndent(level);
+
+        std::cout << "Assignment" << std::endl;
+
+        level++;
+
+        value->print(level);
+
+        variable->print(level);
+    }
+
 protected:
     Assignable* value;
     Variable* variable;
