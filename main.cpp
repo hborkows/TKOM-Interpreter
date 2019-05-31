@@ -1,21 +1,11 @@
 #include <iostream>
-#include "Modules/Source.h"
-#include "Modules/Lexer.h"
-#include "Modules/Parser.h"
+#include "Modules/Interpreter.h"
 
-int main()
+int main(int argc, char** argv)
 {
-    Source source("example1.txt");
-    Lexer lexer(&source);
-    std::vector<Token> tokens;
-    Parser parser(&lexer);
-    ParseTreePrinter printer;
+	std::vector<std::string> arguments(argv + 1, argv + argc);
 
-    auto parseTree = parser.parse();
-
-    //printer.printParseTree(parseTree);
-
-    parseTree->print(0);
+    Interpreter::runProgram(arguments);
 
     std::cout << "Done" << std::endl;
 
