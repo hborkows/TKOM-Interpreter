@@ -10,4 +10,4 @@ add_executable(TKOM_Interpreter main.cpp Modules/Source.cpp Modules/Source.h Mod
         Modules/Tracer.cpp Modules/Tracer.h Modules/Parser.cpp Modules/Parser.h Structures/AST/Expression.h
         Structures/AST/StatementBlock.h Structures/AST/Condition.h Structures/AST/Statement.h Structures/AST/LogVar.h
         Structures/LogEntry.cpp Structures/LogEntry.h Structures/AST/FunctionDefinition.h Structures/AST/Literal.h Structures/AST/Program.h
-        Structures/AST/FieldAccess.h ParseTreePrinter.cpp ParseTreePrinter.h Structures/AST/LexNames.h Modules/Interpreter.h Modules/Executor.cpp Modules/Executor.h Modules/SemanticChecker.cpp Modules/SemanticChecker.h)
+        Structures/AST/FieldAccess.h ParseTreePrinter.cpp ParseTreePrinter.h Structures/AST/LexNames.h Modules/Interpreter.h Modules/Executor.cpp Modules/Executor.h Modules/SemanticChecker.cpp Modules/SemanticChecker.h Structures/Ir/Executable.h Structures/Ir/Scope.h Structures/Ir/Function.h)
