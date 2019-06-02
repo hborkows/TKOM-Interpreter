@@ -8,12 +8,13 @@
 
 #include "ASTNode.h"
 
-class Assignable: public ASTNode
+class Assignable : public ASTNode
 {
 public:
     Assignable() = default;
+
     virtual ~Assignable() = default;
 };
 
 
-#endif //TKOM_INTERPRETER_ASSIGNABLE_H
+#endif //TKOM_INTERPRETER_ASSIGNABLEIR_H

@@ -12,7 +12,8 @@ class Function;
 
 class Executable
 {
-    virtual void execute(Scope* scope, std::unordered_map<std::string, Function*> functions) = 0;
+public:
+    //virtual void execute(Scope* scope, std::unordered_map<std::string, Function*> functions) = 0;
 };
 
 

@@ -5,23 +5,30 @@
 #ifndef TKOM_INTERPRETER_ASSIGNMENT_H
 #define TKOM_INTERPRETER_ASSIGNMENT_H
 
-#include "Assignable.h"
+//#include "Assignable.h"
 #include "Variable.h"
 
-class Assignment: public Assignable, public Statement
+class Assignment : public Assignable, public Statement
 {
 public:
     Assignment() = default;
 
-    ~Assignment() override {delete value; delete variable;};
+    ~Assignment() override
+    {
+        delete value;
+        delete variable;
+    };
 
-    void setAssignable(Assignable* value) {this->value = value;}
+    void setAssignable(Assignable* value)
+    { this->value = value; }
 
-    void setVariable(Variable* variable) {this->variable = variable;}
+    void setVariable(Variable* variable)
+    { this->variable = variable; }
 
-    Type getType() const override {return ASTNode::Type::assignment;}
+    Type getType() const override
+    { return ASTNode::Type::assignment; }
 
-    void print(size_t level)const override
+    void print(size_t level) const override
     {
         ParseTreePrinter::printIndent(level);
 

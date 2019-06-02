@@ -255,7 +255,7 @@ Assignable *Parser::parseAssignable()
     Assignable* node;
     Token temp;
 
-    tracer->enter("Parsing Assignable");
+    tracer->enter("Parsing AssignableIr");
 
     if(peek({LexType::id}))
     {
