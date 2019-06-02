@@ -21,7 +21,7 @@ public:
     {
         ParseTreePrinter::printIndent(level);
 
-        std::cout << "Variable: " << name << std::endl;
+        std::cout << "VariableIr: " << name << std::endl;
     }
 
 protected:

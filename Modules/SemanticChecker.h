@@ -12,19 +12,32 @@
 #include "../Structures/Ir/Executable.h"
 #include "../Structures/Ir/AssignmentIr.h"
 #include "../Structures/Ir/AssignableIr.h"
+#include "../Structures/Ir/WhileIr.h"
+#include "../Structures/Ir/VariableIr.h"
+#include "../Structures/Ir/ConditionIr.h"
+#include "../Structures/Ir/ExpressionIr.h"
+#include "../Structures/Ir/BlockIr.h"
+#include "../Structures/Ir/Scope.h"
 
 class SemanticChecker
 {
 public:
+    std::vector<Executable*> check(Program* parseTree);
 private:
     Program* programTree;
     std::unordered_map<std::string, Function*> definedFunctions;
 
-    Function* checkFunction(FunctionDefinition definition);
+    //Function* checkFunction(FunctionDefinition definition);
+    std::vector<Executable*> traverseTree();
 
-    void checkVariableDeclaration(Scope* scope, VariableDeclaration variableDeclaration);
-    AssignmentIr* checkAssignment(Scope* scope, Assignment assignment);
-    AssignableIr checkAssignable(Scope* scope, Assignable* assignable);
+    VariableIr* checkVariableDeclaration(Scope* scope, VariableDeclaration* variableDeclaration);
+    AssignmentIr* checkAssignment(Scope* scope, Assignment* assignment);
+    AssignableIr* checkAssignable(Scope* scope, Assignable* assignable);
+    WhileIr* checkWhileStatement(Scope* scope, WhileStatement* whileStatement);
+    VariableIr* checkVariable(Scope* scope, Variable* variable);
+    ConditionIr* checkCondition(Scope* scope, Condition* condition);
+    ExpressionIr* checkExpression(Scope* scope, Expression* expression);
+    BlockIr* checkBlock(Scope* scope, StatementBlock* statementBlock);
 };
 
 

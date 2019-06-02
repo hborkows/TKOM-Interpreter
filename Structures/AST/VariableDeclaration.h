@@ -15,6 +15,8 @@ public:
 
     void setName(std::string name) {this->name = name;}
 
+    std::string getName() {return name;}
+
     void setValue(Assignable* value) {this->value = value;}
 
     void setVarType(const LexType& type)
@@ -39,7 +41,7 @@ public:
     {
         ParseTreePrinter::printIndent(level);
 
-        std::cout << "Variable declaration: ";
+        std::cout << "VariableIr declaration: ";
 
         if(varType == Type::log_var)
         {

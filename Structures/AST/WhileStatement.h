@@ -21,6 +21,10 @@ public:
 
     void setCondition(Condition* cond) {condition = cond;}
 
+    Condition* getCondition() {return condition;}
+
+    Statement* getStatement() {return statement;}
+
     Type getType() const override {return ASTNode::Type::while_statement;}
 
     void print(size_t level)const override

@@ -6,7 +6,7 @@
 #define TKOM_INTERPRETER_ASSIGNMENTIR_H
 
 
-class AssignmentIr
+class AssignmentIr: public Executable
 {
 
 };

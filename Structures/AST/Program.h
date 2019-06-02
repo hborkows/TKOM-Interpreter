@@ -48,6 +48,16 @@ public:
         }
     }
 
+    const std::vector<FunctionDefinition*>& getFunctions() const
+    {
+        return functions;
+    }
+
+    const std::vector<Statement*>& getStatements() const
+    {
+        return statements;
+    }
+
 protected:
     std::vector<FunctionDefinition*> functions;
     std::vector<Statement*> statements;
